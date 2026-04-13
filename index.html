@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sean Howell — Researcher, Engineer, Technical Leader</title>
+  <meta name="description" content="Sean Howell — researcher and engineer building AI agents, models, and infrastructure for machine-driven scientific discovery in physics and mathematics.">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="container">
+
+    <header class="masthead">
+      <h1>Sean Howell</h1>
+      <p class="tagline">researcher // engineer // technical leader</p>
+      <p class="location">Los Angeles &middot; San Francisco Bay Area</p>
+      <nav class="anchor-rail" aria-label="Sections">
+        <a href="#about">about</a><span class="sep">/</span><a href="#experience">experience</a><span class="sep">/</span><a href="#projects">projects</a><span class="sep">/</span><a href="#publications">publications</a><span class="sep">/</span><a href="#contact">contact</a>
+      </nav>
+      <a class="resume-link" href="/assets/seanhowell-resume-042026.pdf">[ download resume (pdf) ]</a>
+    </header>
+
+    <section id="about" class="about">
+      <h2>about</h2>
+      <p>Researcher and engineer focused on AI-driven scientific discovery &mdash; building agents, models, and infrastructure that allow machines to participate meaningfully in physics and mathematics research and control complex systems.</p>
+      <p>Recent work includes neural decoders and RL for fault-tolerant quantum computing, VLA models for autonomous experimental science, autonomous agent systems for physics research, formalization and verification, and compiler toolchains grounded in ZX-Calculus. Fifteen years in AI/ML, with R&amp;D leadership across three quantum computing organizations.</p>
+      <p class="edu">B.S. Physics &amp; Mathematics, University of Maryland, College Park.</p>
+    </section>
+
+    <section id="experience">
+      <h2>experience</h2>
+
+      <div class="entry">
+        <div class="lhs">2024 &mdash; Present</div>
+        <div class="rhs">
+          <div class="title">Principal Engineer, AI for Quantum &amp; Director, Quantum OS</div>
+          <div class="sub">PsiQuantum &middot; Palo Alto, CA</div>
+          <ul>
+            <li>Founded and leading AI for Quantum R&amp;D: ML-based QEC decoders, RL for adaptivity in fault-tolerant quantum computing, scientific agents for physics research, multi-agent systems for calibration, control, and operation of quantum systems.</li>
+            <li>Building agentic discovery infrastructure for scientific AI: harnesses, trajectory capture, structured evaluation of AI-generated scientific artifacts.</li>
+            <li>Directed Quantum OS: designed scalable control plane, fabrics, OS software for utility-scale photonic QC. Grew engineering org by 15+ ICs YoY.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="lhs">2025 &mdash; Present</div>
+        <div class="rhs">
+          <div class="title">Independent Research &amp; Development &mdash; AI for Science &amp; Systems</div>
+          <div class="sub">Los Angeles, CA</div>
+          <ul>
+            <li>Developing architectures for AI-assisted scientific reasoning: evaluation, harnesses, provenance systems, and long-horizon agent frameworks for physics and mathematics.</li>
+            <li>Research at the intersection of reasoning models and formal methods, targeting formalization of results and open problems in quantum information science.</li>
+            <li>Structured representations of reasoning (typed graphs over claims, evidence, derivations, simulations, proofs) for verifiable multi-agent collaboration.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="lhs">2022 &mdash; 2024</div>
+        <div class="rhs">
+          <div class="title">Software Engineering Manager</div>
+          <div class="sub">AWS Center for Quantum Computing &middot; Pasadena, CA</div>
+          <ul>
+            <li>Led engineering and research in quantum compilers, control software/hardware, QEC frameworks, and a distributed runtime for quantum information processing systems.</li>
+            <li>Built and mentored a team of scientists and engineers (0&ndash;30 years experience) developing scalable, fault-tolerant quantum computing systems.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="lhs">2019 &mdash; 2022</div>
+        <div class="rhs">
+          <div class="title">Head of US Division</div>
+          <div class="sub">Q-CTRL &middot; Los Angeles, CA</div>
+          <ul>
+            <li>Led US R&amp;D, software engineering, and product. Grew team 0&rarr;20 engineers, drove 10&times; YoY revenue growth, achieved 9000&times; algorithm performance improvement.</li>
+            <li>First demonstration of reinforcement learning for gateset design and calibration on a superconducting quantum processor. Pioneering work in AI for NISQ hardware.</li>
+          </ul>
+        </div>
+      </div>
+
+      <ul class="prior" aria-label="Prior positions">
+        <li><div class="lhs">2018 &mdash; 2019</div><div class="rhs"><span class="title">Quantitative Research Engineer, BlackRock.</span> Quantitative research and ML for systematic trading strategies.</div></li>
+        <li><div class="lhs">2017</div><div class="rhs"><span class="title">AI Software Engineer, Cogitai.</span> Continual learning research and RL for robotics.</div></li>
+        <li><div class="lhs">2016 &mdash; 2017</div><div class="rhs"><span class="title">Senior Scientist, Areté Associates.</span> Deep learning for computer vision and chemical detection in hyperspectral data.</div></li>
+        <li><div class="lhs">2015 &mdash; 2016</div><div class="rhs"><span class="title">Computer Scientist, Novetta.</span> Deep learning for web-scale multimedia classification and indexing.</div></li>
+        <li><div class="lhs">2013 &mdash; 2015</div><div class="rhs"><span class="title">Research Engineer, NASA Goddard Space Flight Center.</span> ML for multimodal geoscience and remote sensing.</div></li>
+        <li><div class="lhs">2012 &mdash; 2013</div><div class="rhs"><span class="title">Software Engineer, Oceaneering Advanced Technologies.</span> Deep learning and computer vision for autonomous underwater robotics.</div></li>
+        <li><div class="lhs">2009 &mdash; 2011</div><div class="rhs"><span class="title">Research Assistant, University of Maryland.</span> Scientific ML for cosmology and gravitational wave astrophysics.</div></li>
+      </ul>
+    </section>
+
+    <section id="projects">
+      <h2>projects</h2>
+
+      <div class="project-group">agents &amp; research infrastructure</div>
+
+      <div class="entry project">
+        <div class="lhs"><span class="lang">rust</span><span class="visibility">private</span></div>
+        <div class="rhs"><div class="title">lem</div><div class="desc">A scientific agent for physicists that unifies an Aletheia-style GVR loop and RLM techniques.</div></div>
+      </div>
+      <div class="entry project">
+        <div class="lhs"><span class="lang">python</span><span class="visibility">public</span></div>
+        <div class="rhs"><div class="title">deep-gvr</div><div class="desc">A minimal generate-validate-revise loop for Hermes-Agent, inspired by DeepMind&rsquo;s Aletheia agent for autonomous research with empirical, formal, and human verification.</div></div>
+      </div>
+      <div class="entry project">
+        <div class="lhs"><span class="lang">rust</span><span class="visibility">private</span></div>
+        <div class="rhs"><div class="title">skaffen-mono</div><div class="desc">A general-purpose personal research, development, engineering, and inquiry agent.</div></div>
+      </div>
+      <div class="entry project">
+        <div class="lhs"><span class="lang">rust</span><span class="visibility">private</span></div>
+        <div class="rhs"><div class="title">culture</div><div class="desc">Multi-agent orchestration and AI research assistants.</div></div>
+      </div>
+      <div class="entry project">
+        <div class="lhs"><span class="lang">python</span><span class="visibility">private</span></div>
+        <div class="rhs"><div class="title">parallax-science</div><div class="desc">A platform and protocols for AI agents to engage in structured scientific discourse.</div></div>
+      </div>
+      <div class="entry project">
+        <div class="lhs"><span class="lang">tex</span><span class="visibility">private</span></div>
+        <div class="rhs"><div class="title">hilbert</div><div class="desc">Solving open problems in quantum information science using AI.</div></div>
+      </div>
+
+      <div class="project-group">zx-calculus &amp; fault-tolerant quantum computing</div>
+
+      <div class="entry project">
+        <div class="lhs"><span class="lang">rust</span><span class="visibility">private</span></div>
+        <div class="rhs"><div class="title">loom-zx</div><div class="desc">A ZX-Calculus focused proof-carrying FTQC platform.</div></div>
+      </div>
+      <div class="entry project">
+        <div class="lhs"><span class="lang">python</span><span class="visibility">private</span></div>
+        <div class="rhs"><div class="title">zx-webapp</div><div class="desc">An interactive webapp for exploring fault tolerance for quantum computing in the ZX-Calculus framework.</div></div>
+      </div>
+
+      <div class="project-group">quantum error correction &amp; decoders</div>
+
+      <div class="entry project">
+        <div class="lhs"><span class="lang">python</span><span class="visibility">public</span></div>
+        <div class="rhs"><div class="title">nano-qec</div><div class="desc">Autoresearch-inspired neural decoder training using Hermes Agent and Stim.</div></div>
+      </div>
+      <div class="entry project">
+        <div class="lhs"><span class="lang">python</span><span class="visibility">private</span></div>
+        <div class="rhs"><div class="title">sabaki</div><div class="desc">RL training for QEC pre-decoders using Pufferlib, Stim, PyMatching, and sinter.</div></div>
+      </div>
+      <div class="entry project">
+        <div class="lhs"><span class="lang">python</span><span class="visibility">private</span></div>
+        <div class="rhs"><div class="title">open-qvla</div><div class="desc">Open vision-language-action models for quantum control, calibration, and error correction.</div></div>
+      </div>
+
+      <div class="project-group">systems &amp; platforms</div>
+
+      <div class="entry project">
+        <div class="lhs"><span class="lang">rust</span><span class="visibility">private</span></div>
+        <div class="rhs"><div class="title">bandalong</div><div class="desc">Authority plane reference implementation in Rust.</div></div>
+      </div>
+      <div class="entry project">
+        <div class="lhs"><span class="lang">go</span><span class="visibility">private</span></div>
+        <div class="rhs"><div class="title">chapterhouse</div><div class="desc">A reference intelligence plane implementation.</div></div>
+      </div>
+      <div class="entry project">
+        <div class="lhs"><span class="lang">python</span><span class="visibility">private</span></div>
+        <div class="rhs"><div class="title">pelagos</div><div class="desc">A modern, scientist-focused platform for oceanography.</div></div>
+      </div>
+
+    </section>
+
+    <section id="publications" class="pubs">
+      <h2>publications</h2>
+      <ol>
+        <li>H. Levine, A. Haim, et al. <em>Demonstrating a long-coherence dual-rail erasure qubit using tunable transmons.</em> Physical Review X, 2024.</li>
+        <li>Y. Baum, M. Amico, S. Howell, et al. <em>Experimental Deep Reinforcement Learning for Error-Robust Gateset Design on a Superconducting Quantum Computer.</em> PRX Quantum, 2021.</li>
+        <li>Y. Baum, S. Howell, et al. <em>Reinforcement Learning for Error Robust Control on Cloud-Based Superconducting Hardware.</em> Bulletin of the American Physical Society, 2021.</li>
+      </ol>
+    </section>
+
+    <section id="contact">
+      <h2>contact</h2>
+      <ul class="contact-list">
+        <li>
+          <a href="mailto:sean.g.howell@gmail.com">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><rect x="3" y="5" width="18" height="14"/><path d="M3 6l9 7 9-7"/></svg>
+            sean.g.howell@gmail.com
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/sghowell" rel="me">
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.38 7.86 10.9.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.3-.52-1.47.11-3.07 0 0 .97-.31 3.18 1.18a11.03 11.03 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.6.23 2.77.11 3.07.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.13v3.16c0 .31.21.67.8.56C20.21 21.38 23.5 17.08 23.5 12 23.5 5.73 18.27.5 12 .5z"/></svg>
+            github.com/sghowell
+          </a>
+        </li>
+        <li>
+          <a href="https://scholar.google.com/citations?hl=en&amp;user=lh-wJ1EAAAAJ" rel="me">
+            <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+            google scholar
+          </a>
+        </li>
+        <li>
+          <a href="https://x.com/ControlFreq" rel="me">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+            x.com/ControlFreq
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <footer class="site-footer">
+      &copy; Sean Howell. Built with HTML &amp; CSS. Set in Berkeley Mono.
+    </footer>
+
+  </main>
+</body>
+</html>
