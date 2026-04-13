@@ -237,6 +237,18 @@ section > h2::before { content: "// "; color: var(--faint); }
   margin-left: 6px;
 }
 
+.project .title a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--faint);
+  padding-bottom: 1px;
+}
+
+.project .title a:hover,
+.project .title a:focus-visible {
+  border-bottom-color: var(--fg);
+}
+
 /* ----- Prior positions dense list ----- */
 
 .prior {
