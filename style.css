@@ -1,0 +1,334 @@
+/* ==========================================================================
+   sghowell.github.io — stylesheet
+   Berkeley Mono, monochrome, zero dependencies, zero JS.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Berkeley Mono";
+  src: url("/fonts/BerkeleyMonoVariable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font: "Berkeley Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --bg: #fafafa;
+  --fg: #111111;
+  --muted: #666666;
+  --faint: #999999;
+  --rule: #111111;
+  --subtle: #e5e5e5;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e0e0e;
+    --fg: #ededed;
+    --muted: #8a8a8a;
+    --faint: #5f5f5f;
+    --rule: #ededed;
+    --subtle: #1f1f1f;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.6;
+  font-feature-settings: "ss01", "ss02";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  max-width: 78ch;
+  margin: 0 auto;
+  padding: 48px 32px 96px;
+}
+
+@media (max-width: 640px) {
+  .container { padding: 32px 20px 64px; }
+}
+
+/* ----- Masthead ----- */
+
+.masthead { margin-bottom: 32px; }
+
+.masthead h1 {
+  margin: 0 0 4px;
+  font-size: 1.625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.masthead .tagline {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  margin: 0 0 2px;
+}
+
+.masthead .location {
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin: 0 0 16px;
+}
+
+.anchor-rail {
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  margin: 0 0 8px;
+}
+
+.anchor-rail a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 1px;
+}
+
+.anchor-rail a:hover,
+.anchor-rail a:focus-visible {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
+}
+
+.anchor-rail .sep {
+  margin: 0 6px;
+  color: var(--faint);
+}
+
+.masthead .resume-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 0.75rem;
+  color: var(--fg);
+  text-decoration: none;
+  border-bottom: 1px solid var(--fg);
+  padding-bottom: 1px;
+}
+
+.masthead .resume-link:hover,
+.masthead .resume-link:focus-visible {
+  border-bottom-width: 2px;
+}
+
+/* ----- Sections ----- */
+
+section {
+  border-top: 1px solid var(--rule);
+  padding-top: 14px;
+  margin-top: 28px;
+}
+
+section:first-of-type { margin-top: 0; }
+
+section > h2 {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 16px;
+}
+
+section > h2::before { content: "// "; color: var(--faint); }
+
+/* ----- About ----- */
+
+.about p {
+  margin: 0 0 12px;
+  max-width: 72ch;
+}
+
+.about .edu {
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-top: 16px;
+}
+
+/* ----- Entries (experience, projects, pubs) ----- */
+
+.entry {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 24px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--subtle);
+}
+
+.entry:last-of-type { border-bottom: 0; }
+
+.entry .lhs {
+  color: var(--muted);
+  font-size: 0.75rem;
+  padding-top: 1px;
+  letter-spacing: 0.02em;
+}
+
+.entry .rhs .title {
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--fg);
+}
+
+.entry .rhs .sub {
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-top: 2px;
+}
+
+.entry .rhs ul {
+  margin: 8px 0 0;
+  padding-left: 16px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+.entry .rhs ul li { margin-bottom: 4px; }
+
+.entry .rhs .desc {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  margin-top: 4px;
+  line-height: 1.55;
+}
+
+@media (max-width: 640px) {
+  .entry { grid-template-columns: 1fr; gap: 6px; }
+  .entry .lhs { font-size: 0.6875rem; }
+}
+
+/* ----- Projects group headings ----- */
+
+.project-group {
+  color: var(--faint);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 22px 0 4px;
+}
+
+.project-group:first-child { margin-top: 0; }
+
+.project .lhs .lang {
+  display: inline-block;
+  font-size: 0.6875rem;
+  color: var(--muted);
+}
+
+.project .lhs .visibility {
+  display: inline-block;
+  font-size: 0.6875rem;
+  color: var(--faint);
+  margin-left: 6px;
+}
+
+/* ----- Prior positions dense list ----- */
+
+.prior {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--subtle);
+  list-style: none;
+  padding-left: 0;
+}
+
+.prior li {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 24px;
+  padding: 6px 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.prior li .lhs { color: var(--muted); font-size: 0.75rem; }
+
+.prior li .rhs .title { color: var(--fg); font-weight: 700; }
+
+@media (max-width: 640px) {
+  .prior li { grid-template-columns: 1fr; gap: 2px; padding: 8px 0; }
+}
+
+/* ----- Publications ----- */
+
+.pubs li {
+  padding: 10px 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  border-bottom: 1px solid var(--subtle);
+  line-height: 1.55;
+}
+
+.pubs li:last-child { border-bottom: 0; }
+
+.pubs em { color: var(--fg); font-style: normal; }
+
+.pubs ol { list-style: decimal; padding-left: 20px; margin: 0; }
+
+/* ----- Contact ----- */
+
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contact-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--fg);
+  text-decoration: none;
+  font-size: 0.875rem;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 1px;
+  width: fit-content;
+}
+
+.contact-list a:hover,
+.contact-list a:focus-visible {
+  border-bottom-color: var(--fg);
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+/* ----- Focus styles ----- */
+
+:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+
+a { color: var(--fg); }
+
+/* ----- Footer ----- */
+
+.site-footer {
+  margin-top: 48px;
+  padding-top: 14px;
+  border-top: 1px solid var(--subtle);
+  color: var(--faint);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+}
