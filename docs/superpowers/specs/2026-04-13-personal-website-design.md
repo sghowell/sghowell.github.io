@@ -30,16 +30,16 @@ Berkeley Mono is a distinctive, licensed typeface with a strong engineering-grap
 
 ## 4. Information architecture
 
-Single page, five sections in this order:
+Single page. A masthead at the top, then five content sections in this order:
 
-1. **Header** (masthead, not a nav bar)
-2. **About**
-3. **Experience**
-4. **Projects**
-5. **Publications**
-6. **Contact**
+0. **Header** (masthead, not a nav bar)
+1. **About**
+2. **Experience**
+3. **Projects**
+4. **Publications**
+5. **Contact**
 
-A small anchor rail under the header links to each section (`about / experience / projects / publications / contact`). There is no sticky top nav — the page is short enough to scroll.
+A small anchor rail under the header links to each content section (`about / experience / projects / publications / contact`). There is no sticky top nav — the page is short enough to scroll.
 
 ### 4.1 Header
 
@@ -275,10 +275,11 @@ Current state: repo is initialized locally, has `LICENSE`, `README.md`, and the 
 
 Steps:
 
-1. Verify no GitHub repo exists at `sghowell/sghowell.github.io` via `gh repo view`. If it does not exist, create it via `gh repo create sghowell/sghowell.github.io --public --source=. --remote=origin`. If it exists, add the SSH remote manually.
-2. Confirm the working tree contains all intended files.
-3. Commit.
-4. Push to `main`.
+1. Move `seanhowell-resume-042026.pdf` from the repo root to `assets/seanhowell-resume-042026.pdf` (via `git mv` to preserve history).
+2. Verify no GitHub repo exists at `sghowell/sghowell.github.io` via `gh repo view`. If it does not exist, create it via `gh repo create sghowell/sghowell.github.io --public --source=. --remote=origin`. If it exists, add the SSH remote manually.
+3. Confirm the working tree contains all intended files.
+4. Commit.
+5. Push to `main`.
 
 ### 10.2 GitHub Pages configuration
 
@@ -331,7 +332,7 @@ Four inline SVG icons for the contact section. All are drawn in a 24×24 viewBox
 - **Email** — simple envelope outline (SVG path).
 - **GitHub** — the standard Octocat silhouette, simplified.
 - **Google Scholar** — the graduation-cap-over-shield glyph, simplified.
-- **X** — the `𝕏` wordmark or the simple two-stroke glyph.
+- **X** — the simple two-stroke glyph (two crossed strokes forming an X), drawn with `currentColor` strokes.
 
 Icons live inline in `index.html` so there are no external font or image requests. CSS class `.icon` handles sizing and vertical alignment.
 
@@ -352,7 +353,7 @@ Replace the one-line README with:
 - Contact form.
 - Custom domain.
 - Sitemap.xml, robots.txt customization.
-- Open Graph / meta tags beyond basics.
+- Open Graph / Twitter Card meta tags. (v1 ships only `charset`, `viewport`, `title`, and a single `description` meta tag.)
 - Favicon (may be added as a trivial follow-up; not required for v1).
 - Print stylesheet.
 
