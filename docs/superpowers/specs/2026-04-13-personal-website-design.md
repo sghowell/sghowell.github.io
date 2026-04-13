@@ -106,7 +106,7 @@ Two sub-blocks:
 3. **skaffen-mono** — General-purpose personal research, development, engineering, and inquiry agent. `rust, private`
 4. **culture** — Multi-agent orchestration and AI research assistants. `rust, private`
 5. **parallax-science** — A platform and protocols for AI agents to engage in structured scientific discourse. `python, private`
-6. **hilbert** — Solving open problems in QIS using AI. `tex, private`
+6. **hilbert** — Solving open problems in quantum information science using AI. `tex, private`
 
 **Group 2 — ZX-calculus & fault-tolerant quantum computing**
 
@@ -139,7 +139,7 @@ Four contact methods, each as an icon link (inline SVG) + label:
 
 - **Email** — `sean.g.howell@gmail.com` (`mailto:` link)
 - **GitHub** — `github.com/sghowell` → `https://github.com/sghowell`
-- **Google Scholar** — `scholar` → `https://scholar.google.com/citations?hl=en&user=lh-wJ1EAAAAJ`
+- **Google Scholar** — `google scholar` → `https://scholar.google.com/citations?hl=en&user=lh-wJ1EAAAAJ`
 - **X (Twitter)** — `@ControlFreq` → `https://x.com/ControlFreq`
 
 No phone number. No form. No LinkedIn (not requested).
@@ -168,7 +168,7 @@ Berkeley Mono is a variable font supplied as a single `.woff2` file (~166KB). A 
 
 All sizes in rem, base `16px`:
 
-- Name (`h1`): `2.25rem`, weight 700, letter-spacing `0.05em`, uppercase
+- Name (`h1`): `1.625rem`, weight 700, letter-spacing `0.06em`, uppercase
 - Section header (`h2`): `0.8125rem`, weight 700, letter-spacing `0.14em`, uppercase, prefixed with `// ` in content
 - Entry title (`h3` or `.role`): `0.875rem`, weight 700
 - Body text: `0.875rem`, weight 400, line-height `1.6`
@@ -229,7 +229,7 @@ Inside experience and project sections, each entry uses a two-column grid:
 ```css
 .entry {
   display: grid;
-  grid-template-columns: 140px 1fr;
+  grid-template-columns: 150px 1fr;
   gap: 24px;
   padding: 12px 0;
 }
