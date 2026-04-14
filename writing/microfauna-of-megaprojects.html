@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>On the Microfauna of Megaprojects — Sean Howell</title>
+  <meta name="description" content="Why the biggest machines of the next decade will be inhabited by dense ecologies of small machine intelligences—and why the organizations that matter should start cultivating them now.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="essay">
+  <main class="container">
+
+    <div class="top-strip">
+      <a class="brand" href="/">SEAN HOWELL<span class="sep">/</span>WRITING</a>
+      <a class="back" href="/#writing">← back</a>
+    </div>
+
+    <header class="essay-header">
+      <p class="eyebrow">essay</p>
+      <h1>On the Microfauna of Megaprojects</h1>
+      <p class="dek">Why the biggest machines of the next decade will be inhabited by dense ecologies of small machine intelligences—and why the organizations that matter should start cultivating them now.</p>
+      <p class="date">March 2026</p>
+    </header>
+
+    <article class="article">
+
+      <p>I increasingly think the control-plane metaphor is too neat for what is coming. It still imagines a clean hierarchy: machine below, intelligence above, human at the top. The next decade's serious systems will not look like that. A utility-scale quantum computer, an autonomous lab, an advanced chip fab, or a large robot fleet will be inhabited by something more like microfauna: dense populations of small, specialized machine intelligences living inside the project and feeding on its telemetry, schedules, faults, work orders, and simulations. Some will watch drift. Some will route jobs. Some will reconcile sensors. Some will triage repairs. Some will negotiate between throughput and risk. Most of them will be boring. All of them will matter.</p>
+
+      <p>My own work on scientific agents is part of why I have grown impatient with the word <em>copilot</em>. A copilot sits beside a human and waits to be asked. These systems need resident operators woven into the substrate. Quantum already tells the story. IBM's current fault-tolerant plan is explicitly modular and adaptive, with real-time decoded measurements that can change subsequent instructions, a compact decoder architecture aimed at FPGA or ASIC implementation, and a 2029 target of 200 logical qubits running 100 million gates.<sup class="note"><a href="#ref1">1</a></sup> Google reports the same basic truth from another direction: on Willow, error correction now works well enough that decoder latency itself becomes a first-order systems problem, with 50–100 microseconds of delay already material to performance.<sup class="note"><a href="#ref2">2</a></sup> PsiQuantum, meanwhile, is no longer talking like a lab prototype vendor; it is talking in the language of tier-1 foundries, thousands of wafers, cryogenic cabinets supporting hundreds of chips, and million-qubit machines.<sup class="note"><a href="#ref3">3</a></sup> These are not isolated devices anymore. They are operational ecologies.</p>
+
+      <h2>The small agents arrive first</h2>
+
+      <p>The same pattern is now showing up in other domains with surprisingly little disguise. Applied Materials describes chipmaking as a continuous chain from atomic-scale materials simulation to fab-scale digital twins, with millions of measurements, thousands of process variables, and virtual studies that now collapse weeks into same-day work.<sup class="note"><a href="#ref4">4</a></sup> The U.S. Commerce Department has backed a semiconductor digital-twin institute with explicit goals to cut development and manufacturing costs by more than 40 percent and cycle times by 35 percent.<sup class="note"><a href="#ref5">5</a></sup> BMW is scaling digital twins across more than 30 production sites, expects up to 30 percent lower planning costs, and says the system is being expanded with generative and agentic AI assistants.<sup class="note"><a href="#ref6">6</a></sup> Amazon has deployed its millionth robot and says its DeepFleet model should improve travel efficiency across the fleet by 10 percent.<sup class="note"><a href="#ref7">7</a></sup> NVIDIA is now publishing blueprints for robot-fleet twins and AI-factory operations that explicitly connect power, cooling, networking, and operations agents.<sup class="note"><a href="#ref8">8</a></sup> Siemens, working with NVIDIA, is talking openly about an industrial AI operating system and fully AI-driven adaptive manufacturing blueprints starting in 2026, while PepsiCo is already using its new twin stack to catch potential facility issues before physical changes are made.<sup class="note"><a href="#ref9">9</a></sup></p>
+
+      <p>In science, the boundary is dissolving just as fast. <em>Nature</em> papers now describe autonomous mobile robots for exploratory chemistry, LLM-driven systems that can design, plan, and execute experiments through tool use, and growing interest in self-driving labs as shared network infrastructure rather than one-off curiosities.<sup class="note"><a href="#ref10">10</a></sup><sup class="note"><a href="#ref11">11</a></sup> The practical point is that autonomy will arrive as graded resident capability, not as a single dramatic handoff. The important architectural fact is that these roles are local, narrow, and continuous. A quantum computer needs agents that watch syndrome statistics, prioritize recalibration, detect creeping thermal or RF pathologies, choose when to reroute workloads, and translate application demand into live resource commitments. A fab needs agents that sit between chamber physics, metrology, recipes, and throughput. A robot fleet needs traffic organisms, map maintainers, collision forecasters, charge schedulers, and exception triage. A self-driving lab needs experiment proposers, instrument translators, literature scavengers, and safety clerks. These systems do not want a single giant model making every decision from first principles. They want many smaller models with limited authority, shared state, and hard boundaries.</p>
+
+      <div class="pullquote">
+        <p>Megaprojects do not become autonomous by growing a brain. They become autonomous by growing a biosphere.</p>
+      </div>
+
+      <h2>The project becomes a managed ecosystem</h2>
+
+      <p>This is the part I think people still underweight. The important agents will not mostly look like scientists or strategists. They will look like janitors, dispatchers, inspectors, bookkeepers, and mechanics. One will notice that a particular syndrome pattern in a quantum module is the early smell of a calibration slip. Another will delay a process step because a metrology instrument is starting to drift. Another will rewrite robot traffic after a small layout change. Another will refuse an experiment plan because the solvent cabinet, glovebox schedule, and waste stream are already near constraint. The hard problem is not producing brilliant answers in the abstract. It is maintaining local order in a system that never stops moving.</p>
+
+      <p>That is why I do not expect the winning pattern to be one giant model sitting in a control room. Central planners are useful, but the combinatorics arrive faster than any single loop can absorb them. The winning pattern is a society of narrower models with limited authority, shared state, and explicit law. Think of a megaproject less as a machine with a brain than as a habitat with an immune system, a circulatory system, and a bookkeeping layer. If the data model is clean and the rules are tight, this ecology becomes extraordinarily powerful. If the data model is dirty and the rules are fuzzy, it goes feral fast.</p>
+
+      <p>This also changes the shape of the firm. Project management stops being mostly a matter of meetings and starts becoming a live inference system. Schedules become live beliefs about what the plant can really do this week. Change control moves from PDF procedure to machine-readable law. The org chart matters less than the permission graph: who, or what, is allowed to sense, decide, and act.</p>
+
+      <p>My aggressive bet is that by the early 2030s the decisive moat in many of these systems will sit less in the headline hardware than in the resident ecology around it. Two teams may have comparable robot cells, comparable process tools, comparable qubits, even comparable foundation models. One will have years of replayable telemetry, shadow agents, simulator traces, policy history, and incident memory. The other will have dashboards, tickets, heroics, and tribal knowledge. From the outside they will look similar. Inside, one will compound and the other will stall.</p>
+
+      <h2>Predictions, sooner than people think</h2>
+
+      <p>By 2027, every credible fault-tolerant quantum effort will have agentic operations in shadow mode across calibration prioritization, decoder tuning, workload admission, and failure diagnosis. By 2028, at least one major fab, robot-heavy factory, or autonomous-lab network will treat the live digital twin as a commissioning requirement rather than a planning aid. By 2029, large industrial systems will begin to budget inference, simulation, and policy infrastructure the way they already budget power, cooling, and cleanroom utilities. That same year, I would expect the first utility-scale quantum programs to discover that the real bottleneck is not a single hardware metric but the coordination burden of keeping the whole stack inside its useful envelope.</p>
+
+      <p>By 2030, the phrase <em>operator headcount</em> will need an asterisk. The median consequential decision inside a frontier lab, fab, or robot fleet will already have been made, filtered, or scheduled by machine intelligence before a human ever sees it. Humans will still set objectives, own risk, sign off on escalations, and intervene in novel situations. But they will no longer be the runtime. They will be the constitutional layer.</p>
+
+      <p>By 2032, procurement, finance, and regulation will start to absorb this. Black-box equipment that cannot emit structured state, accept policy-mediated commands, or participate in replayable digital twins will begin to look obsolete. Insurers and auditors will want incident lineage, action traces, uncertainty thresholds, and rollback proofs. In other words, the microfauna will stop being an internal convenience and become part of the official operating model.</p>
+
+      <h2>What to do now</h2>
+
+      <p>The immediate work is much less glamorous than the vision. First, instrument the system as if it is going to host machine operators. High-frequency telemetry, calibration histories, maintenance records, operator notes, work orders, simulator outputs, and control actions need to land in a shared event model with stable identifiers and real timestamps. You cannot grow useful microfauna in a swamp of screenshots, spreadsheets, and PDF procedures.</p>
+
+      <p>Second, stop treating digital twins as presentationware. Build them for replay, counterfactuals, and shadow operation. Every meaningful intervention should be testable against a twin or at least a surrogate before it touches live hardware. Every incident should become training material. Every near miss should be reproducible enough that an agent can learn from it without rerunning the failure in the plant.</p>
+
+      <p>Third, write a machine constitution before you write a machine personality. Most of the engineering here is permissions, not prompt craft: what an agent may observe, propose, execute, defer, cancel, or escalate; what uncertainty bars apply; what hard invariants may never be crossed; what rollback path exists if the model is wrong; which human signatures are required when the stakes change. A megaproject without this will still grow microfauna. It will just grow them accidentally.</p>
+
+      <p>Fourth, seed the ecology with narrow residents. Give one agent ownership of calibration prioritization. Give another maintenance triage. Give a third responsibility for routing robot traffic, ranking experiments, or reconciling metrology against throughput. Run them in shadow mode. Compare them against human baselines. Keep their action surfaces small until they earn more. The goal is not to conjure an industrial superintelligence. The goal is to discover which organisms are actually useful and under what constraints.</p>
+
+      <p>Finally, staff this like core infrastructure. The right team is not an AI initiative off to the side. It is a joint operating group of controls people, software people, domain scientists, reliability engineers, and whoever carries operational accountability. If the system is strategic, the ecology around it is strategic.</p>
+
+      <p>I do not think the next decade ends with one majestic industrial mind quietly running everything. I think it ends with something stranger and more practical: megaprojects that are dense with constrained machine operators, each unremarkable on its own, together forming the metabolism of the system. The question is no longer whether such microfauna will appear. They already have. The question is whether we cultivate their habitat deliberately enough that they make the project coherent instead of feral.</p>
+
+    </article>
+
+    <section class="sources" aria-labelledby="sources-heading">
+      <h2 id="sources-heading">sources</h2>
+      <ol>
+        <li id="ref1">
+          IBM Quantum Blog,
+          <a href="https://www.ibm.com/quantum/blog/large-scale-ftqc">"How IBM will build the world's first large-scale, fault-tolerant quantum computer"</a>,
+          June 10, 2025; and IBM,
+          <a href="https://www.ibm.com/quantum/hardware">"Quantum computing hardware and roadmap"</a>,
+          accessed March 30, 2026.
+        </li>
+        <li id="ref2">
+          Google Research,
+          <a href="https://research.google/blog/making-quantum-error-correction-work/">"Making quantum error correction work"</a>,
+          December 9, 2024; and Michael Newman et al.,
+          <a href="https://www.nature.com/articles/s41586-024-08449-y">"Quantum error correction below the surface code threshold"</a>,
+          <em>Nature</em>, 2025.
+        </li>
+        <li id="ref3">
+          PsiQuantum,
+          <a href="https://www.psiquantum.com/news-import/omega">"PsiQuantum Announces Omega, a Manufacturable Chipset for Photonic Quantum Computing"</a>,
+          February 26, 2025; and PsiQuantum,
+          <a href="https://www.psiquantum.com/about">"About"</a>,
+          accessed March 30, 2026.
+        </li>
+        <li id="ref4">
+          Applied Materials,
+          <a href="https://www.appliedmaterials.com/us/en/semiconductor/solutions-and-software/ai-x.html">"AIx"</a>,
+          accessed March 30, 2026; and Applied Materials,
+          <a href="https://www.appliedmaterials.com/us/en/newsroom/quick-takes/applied-materials-accelerates-end-to-end-chip-manufacturing-with-nvidia-ai.html">"Applied Materials Collaborates With NVIDIA to Accelerate End-to-End Chip Manufacturing"</a>,
+          February 18, 2026.
+        </li>
+        <li id="ref5">
+          U.S. Department of Commerce,
+          <a href="https://www.commerce.gov/news/press-releases/2025/01/biden-harris-administration-awards-semiconductor-research-corporation">"Biden-Harris Administration Awards Semiconductor Research Corporation Manufacturing Consortium Corporation $285M for New CHIPS Manufacturing USA Institute for Digital Twins"</a>,
+          January 3, 2025.
+        </li>
+        <li id="ref6">
+          BMW Group,
+          <a href="https://www.press.bmwgroup.com/global/article/detail/T0450699EN/bmw-group-scales-virtual-factory?language=en">"BMW Group scales Virtual Factory"</a>,
+          June 11, 2025; and NVIDIA,
+          <a href="https://www.nvidia.com/en-us/case-studies/bmw-group-develop/">"BMW Group Develop Custom Application on NVIDIA Omniverse"</a>,
+          accessed March 30, 2026.
+        </li>
+        <li id="ref7">
+          Amazon,
+          <a href="https://www.aboutamazon.com/news/operations/amazon-million-robots-ai-foundation-model">"Amazon launches a new AI foundation model to power its robotic fleet and deploys its 1 millionth robot"</a>,
+          June 30, 2025.
+        </li>
+        <li id="ref8">
+          NVIDIA,
+          <a href="https://blogs.nvidia.com/blog/mega-omniverse-blueprint/">"NVIDIA Unveils 'Mega' Omniverse Blueprint for Building Industrial Robot Fleet Digital Twins"</a>,
+          January 6, 2025; NVIDIA,
+          <a href="https://nvidianews.nvidia.com/news/nvidia-releases-vera-rubin-dsx-ai-factory-reference-design-and-omniverse-dsx-digital-twin-blueprint-with-broad-industry-support">"NVIDIA Releases Vera Rubin DSX AI Factory Reference Design and Omniverse DSX Digital Twin Blueprint With Broad Industry Support"</a>,
+          March 16, 2026; and NVIDIA,
+          <a href="https://www.nvidia.com/en-us/omniverse/">"NVIDIA Omniverse"</a>,
+          accessed March 30, 2026.
+        </li>
+        <li id="ref9">
+          NVIDIA Newsroom,
+          <a href="https://nvidianews.nvidia.com/news/siemens-and-nvidia-expand-partnership-industrial-ai-operating-system">"Siemens and NVIDIA Expand Partnership to Build the Industrial AI Operating System"</a>,
+          January 6, 2026; and Siemens,
+          <a href="https://press.siemens.com/global/en/pressrelease/siemens-unveils-technologies-accelerate-industrial-ai-revolution-ces-2026">"Siemens unveils technologies to accelerate the industrial AI revolution at CES 2026"</a>,
+          January 6, 2026.
+        </li>
+        <li id="ref10">
+          Tianyi Dai et al.,
+          <a href="https://www.nature.com/articles/s41586-024-08173-7">"Autonomous mobile robots for exploratory synthetic chemistry"</a>,
+          <em>Nature</em>, 2024; and Daniel A. Boiko et al.,
+          <a href="https://www.nature.com/articles/s41586-023-06792-0">"Autonomous chemical research with large language models"</a>,
+          <em>Nature</em>, 2023.
+        </li>
+        <li id="ref11">
+          R. B. Canty et al.,
+          <a href="https://www.nature.com/articles/s41467-025-59231-1">"Science acceleration and accessibility with self-driving labs"</a>,
+          <em>Nature Communications</em>, 2025; and L. Hung et al.,
+          <a href="https://pubs.rsc.org/en/content/articlelanding/2024/dd/d4dd00059e">"Autonomous laboratories for accelerated materials discovery: a community survey and practical insights"</a>,
+          <em>Digital Discovery</em>, 2024.
+        </li>
+      </ol>
+    </section>
+
+    <div class="bottom-strip">
+      <a class="back" href="/#writing">← back to writing</a>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    &copy; Sean Howell. Built with HTML &amp; CSS. Set in Berkeley Mono and IBM Plex Sans.
+  </footer>
+
+</body>
+</html>
