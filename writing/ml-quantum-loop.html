@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Doing ML to Build Quantum Computers to do ML With</title>
+  <meta name="description" content="On the recursive structure of machine learning and quantum computing, and why a new result on quantum oracle sketching gives the second half of the loop a rigorous foothold.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="essay">
+  <main class="container">
+
+    <div class="top-strip">
+      <a class="brand" href="/">SEAN HOWELL<span class="sep">/</span>WRITING</a>
+      <a class="back" href="/#writing">← back</a>
+    </div>
+
+    <header class="essay-header">
+      <p class="eyebrow">essay</p>
+      <h1>Doing ML to Build Quantum Computers to do ML With</h1>
+      <p class="dek">On the recursive structure of machine learning and quantum computing, and why a new result on quantum oracle sketching gives the second half of the loop a rigorous foothold.</p>
+      <p class="date">April 2026</p>
+    </header>
+
+    <article class="article">
+
+      <p>The title of this essay is, consciously and with affection, borrowed from the recursive logic of Spacemen 3's 1990 album <em>Taking Drugs to Make Music to Take Drugs to</em>. I first described my motivations in exactly these terms in 2019, during a conversation with Guillaume Verdon (now CEO of Extropic), and the phrase has been rattling around in my head ever since. It captured something I couldn't articulate in more respectable language: the relationship between machine learning and quantum computing is a loop, with each field feeding the other. A strange loop, if you want to be Hofstadterian about it. And recent results suggest that the loop might be even tighter than I originally imagined.</p>
+
+      <h2>The parallel that got me into this</h2>
+
+      <p>I came to quantum computing from ML and AI rather than from physics. My training is in physics and mathematics, but my career was built on the applied side of learning systems: reinforcement learning, neural networks, control. When I first started looking seriously at the problems facing quantum computing around 2018, what struck me was the familiarity of the engineering challenge, more than the exotica of superposition and entanglement. I had spent years thinking about how to make robots do useful things in noisy, partially observable environments where the dynamics were only approximately known and the feedback was delayed and lossy. Quantum computing, at the systems level, was the same problem wearing different clothes.</p>
+
+      <p>A superconducting qubit drifts. A neutral atom moves under imperfect traps. A photon is lost in a waveguide. Underneath the exotica, these are control problems. The quantum part is that the state space is exponentially large, the measurements are destructive, and the noise model is rich and entangled (literally) with the computation itself. The structure of what you need to do about it, which is sense, decide, actuate, and learn from the outcome to do better next time, is the same structure that governs every interesting control problem I had ever worked on.</p>
+
+      <p>This parallel is what pulled me in. The specific realization was that the systems people were building to control quantum hardware were going to need the same kind of intelligence that roboticists had been developing for decades, and that this fact was underappreciated. Calibration loops, error correction decoding, resource allocation across a quantum processor, adaptive compilation that responds to real-time device conditions: all of these are problems where learned, adaptive, data-driven policies will eventually outperform hand-crafted heuristics, for the same reasons they outperform hand-crafted heuristics in every other domain of sufficient complexity.</p>
+
+      <p>I spent the next seven years building teams and infrastructure to make that case concrete. At Q-CTRL, across multiple qubit modalities including neutral atoms. At AWS Center for Quantum Computing, leading the distributed runtime and control stack for superconducting hardware. At PsiQuantum, founding the AI for Quantum team and building RL-based adaptive control for photonic fault-tolerant architectures. And in independent research since, building the agent infrastructure and scientific reasoning tools that I believe this domain will eventually require.</p>
+
+      <p>All of that work was the first half of the loop: using ML to build quantum computers. Doing ML to build quantum computers.</p>
+
+      <h2>The second half of the loop</h2>
+
+      <p>The second half, quantum computers doing ML, has had a more complicated history. The quantum machine learning literature of the 2010s was dominated by variational approaches and QRAM-dependent algorithms, and the field accumulated a reputation for overpromising. The dequantization results from Tang and others showed that many proposed quantum speedups evaporated once you thought carefully about the classical baselines. Barren plateau results cast doubt on the trainability of variational circuits at scale. The QRAM assumption, which underpinned most quantum linear algebra algorithms, was revealed as load-bearing in exactly the wrong way: maintaining coherent random access to classical data required so much overhead that the classical co-processors needed to sustain it could often just solve the problem directly.</p>
+
+      <p>Reasonable people looked at this landscape and concluded that quantum advantage for ML on classical data was probably not real, or at minimum not practical. I understood the skepticism. I shared some of it. But I also thought the conclusion was premature, because the field had been asking a specific version of the question (can we speed up existing ML algorithms on a quantum computer?) rather than the more interesting one (are there information-processing tasks on classical data where quantum mechanics provides a structural advantage that no classical approach can replicate?).</p>
+
+      <p>A paper posted to the arXiv on April 8, 2026, answers that more interesting question in the affirmative, and does so convincingly enough that the implications are worth taking seriously.<sup class="note"><a href="#ref1">1</a></sup></p>
+
+      <h2>Quantum oracle sketching and what it changes</h2>
+
+      <p>The paper is "Exponential quantum advantage in processing massive classical data" by Haimeng Zhao, Alexander Zlokapa, Hartmut Neven, Ryan Babbush, John Preskill, Jarrod McClean, and Hsin-Yuan Huang. The author list alone tells you something: this is Google Quantum AI, Caltech, MIT, and Oratomic. These are not people who publish casually.</p>
+
+      <p>The core contribution is a new framework called quantum oracle sketching. The old barrier to quantum advantage on classical data was the data loading problem: quantum algorithms need coherent superposition queries over the data, but classical data is, by definition, classical. Previous approaches stored the entire dataset in QRAM, which defeated the purpose. Quantum oracle sketching resolves this by constructing approximate quantum oracles incrementally from streaming classical samples. Each sample is processed once and discarded. No storage of the full dataset. No QRAM. The resulting approximate oracle is good enough, with rigorously bounded error, to run any quantum query algorithm against it.</p>
+
+      <p>The technical insight is beautiful. If you naively apply random small rotations driven by data samples, the randomness destroys coherence and the error scales as N²/M (where N is the data dimension and M is the number of samples). This is useless. But by designing the rotations so that contributions from distinct data points act on orthogonal subspaces, the error drops to N/M. That difference is the entire paper. It means M = O(N) samples suffice to build an oracle query, and from there you can run any quantum algorithm that uses oracle access.</p>
+
+      <p>Combined with classical shadow tomography for readout, this yields end-to-end quantum advantage for classification (via least-squares SVM), dimensionality reduction (via PCA), and solving linear systems. A quantum computer with poly(log N) qubits can perform these tasks where any classical machine needs exponentially more memory to achieve the same accuracy. The authors validate this numerically on real datasets, including sentiment analysis of movie reviews and single-cell RNA sequencing analysis of blood cells, demonstrating four to six orders of magnitude reduction in machine size using fewer than 60 logical qubits.</p>
+
+      <p>Two things about this result matter beyond the specific theorems.</p>
+
+      <p>First, the advantage is unconditional. It relies only on the correctness of quantum mechanics, not on any complexity-theoretic conjectures. It persists even if BPP = BQP. It persists even if classical machines are given unlimited time. This is a different kind of advantage than what most people in quantum computing are used to discussing. It is a space advantage rather than a time advantage, and it is information-theoretic in nature.</p>
+
+      <p>Second, the authors explicitly position experimental verification of these results as a fundamental test of quantum mechanics at the complexity frontier, analogous to how Bell inequality violations test nonlocality. This analogy is load-bearing. If a small quantum device can demonstrably compress massive classical datasets into accurate models that no classical machine of comparable size can produce, that tells us something about the physical reality of exponentially large Hilbert spaces that goes beyond any previous experiment.</p>
+
+      <h2>Closing the loop</h2>
+
+      <p>This is where the loop closes, and where the Spacemen 3 analogy starts carrying structural weight.</p>
+
+      <p>We need ML to build quantum computers. The operational complexity of fault-tolerant quantum hardware, the decoding, the calibration, the adaptive control, the resource management, exceeds human cognitive bandwidth by such a wide margin that AI-based control has become a prerequisite. I have argued this at length elsewhere, and the evidence continues to accumulate. Google's AlphaQubit demonstrated that neural decoders can outperform the best hand-crafted decoders on real hardware. The systems being designed for the next generation of devices (by Google, by Oratomic, by PsiQuantum, by IBM, by the neutral atom community) are all converging on architectures where the classical control plane will have to be intelligent in ways that go well beyond lookup tables and threshold comparisons.</p>
+
+      <p>And now we have strong theoretical evidence, with numerical validation on real data, that the quantum computers we are building with ML will be able to do ML that classical computers cannot. The advantage is provable, unconditional, and exponential in the memory resources required to process massive classical datasets.</p>
+
+      <div class="pullquote">
+        <p>The relationship between ML and quantum computing is a positive feedback loop, each half enabling and requiring the other.</p>
+      </div>
+
+      <p>The robotics parallel holds here too. In robotics, better perception enables better control, which enables operation in more complex environments, which generates richer data, which enables better perception. The loop between sensing and acting is what turns a pile of servos and cameras into a capable system. In the quantum case, the loop is between the classical intelligence that operates the machine and the quantum information processing that the machine performs. Better ML for control means better quantum hardware. Better quantum hardware means access to computational capabilities (like the exponential compression of classical data demonstrated by Zhao et al.) that feed back into the development of more powerful ML.</p>
+
+      <p>A caveat on scope. The Zhao et al. result is about a specific regime: massive datasets where machine size is the bottleneck. Classical ML will remain the workhorse for the vast majority of applications for a very long time. The claim here is narrower: the intersection of ML and quantum computing is a genuine technical loop where progress on each side accelerates the other, and the recent theoretical results give us reason to believe that the quantum side has more to offer than previous skepticism suggested.</p>
+
+      <h2>What gets built</h2>
+
+      <p>If you take the loop seriously, it has implications for what should get built now.</p>
+
+      <p>On the ML-for-quantum side: the path from laboratory demonstrations to utility-scale quantum computers runs through control systems that are adaptive, robust, and fast. Neural decoders that operate at microsecond latency. RL agents that continuously optimize calibration against drifting hardware. Compilation and resource management systems that respond to real-time conditions. All of this is engineering work that benefits from the same infrastructure, training loops, model architectures, and inference optimization that the broader ML community has been developing for other domains. The quantum application provides a forcing function: the latency constraints are tighter, the physics is less forgiving, and the cost of being wrong is immediate. These are good properties for a problem to have if you want to push the state of the art in real-time learned control.</p>
+
+      <p>On the quantum-for-ML side: the Zhao et al. framework opens up a concrete research program. Quantum oracle sketching needs to be extended to broader classes of ML tasks. The parallelization opportunities the authors identify (the algorithm is largely composed of commuting operations) need to be explored through hardware-software co-design. Hybrid pipelines that combine quantum oracle sketching with classical pre- and post-processing need to be developed. The numerical experiments need to be scaled up and eventually run on real quantum hardware. And the connection to other domains where massive data processing is the bottleneck, including the physical sciences, genomics, and earth observation, needs to be mapped out.</p>
+
+      <p>And then there is the intersection itself, which I find most compelling. The quantum computers of the near future will be controlled by ML systems. Those ML systems will generate enormous amounts of operational data: syndrome measurements, calibration trajectories, performance telemetry across thousands of qubits over months of continuous operation. Processing that data efficiently to improve the next generation of control policies is itself a massive classical data problem. A problem that, if the theoretical results hold up in practice, might be addressed more effectively by the very quantum hardware that generated the data.</p>
+
+      <p>Doing ML to build quantum computers to do ML with. The loop is real. The recursion is the point.</p>
+
+      <h2>A personal note</h2>
+
+      <p>I mentioned that I first articulated this framing in 2019, talking to Guillaume Verdon about where I thought the field was headed. The years since have been long on engineering and shorter on vindication than I would have liked. The skeptics about quantum ML were right to be skeptical of the specific claims being made at the time. But they were wrong to close the book on the broader question.</p>
+
+      <p>The Zhao et al. paper is, I hope, the beginning of a new conversation about what becomes possible when you stop thinking of ML and quantum computing as separate fields that occasionally collaborate and start thinking of them as a coupled system. The metaphor I keep coming back to, because it is the one that brought me here in the first place, is from robotics: the body and the brain co-evolve. You cannot design one without the other. The interesting intelligence emerges from their interaction.</p>
+
+      <p>I believe something similar is true for quantum computing and ML. The interesting capability, the kind that neither field can achieve on its own, emerges from the loop. We are early in understanding what that looks like. But for the first time, we have unconditional theoretical evidence that the loop has two functioning halves.</p>
+
+      <p>That strikes me as worth working on.</p>
+
+    </article>
+
+    <section class="sources" aria-labelledby="sources-heading">
+      <h2 id="sources-heading">sources</h2>
+      <ol>
+        <li id="ref1">
+          H. Zhao, A. Zlokapa, H. Neven, R. Babbush, J. Preskill, J. R. McClean, and H.-Y. Huang,
+          <a href="https://arxiv.org/abs/2604.07639">"Exponential quantum advantage in processing massive classical data"</a>,
+          arXiv:2604.07639, April 8, 2026.
+        </li>
+      </ol>
+    </section>
+
+    <div class="bottom-strip">
+      <a class="back" href="/#writing">← back to writing</a>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    &copy; Sean Howell. Built with HTML &amp; CSS. Set in Berkeley Mono and IBM Plex Sans.
+  </footer>
+
+</body>
+</html>
