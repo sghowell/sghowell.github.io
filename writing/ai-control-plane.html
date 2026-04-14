@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI as the Control Plane for Impossible Machines — Sean Howell</title>
+  <meta name="description" content="Why utility-scale quantum computers, autonomous laboratories, advanced fabs, and large robotic systems will need advanced AI as an operating layer—not as a convenience feature, but as part of the machine.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="essay">
+  <main class="container">
+
+    <div class="top-strip">
+      <a class="brand" href="/">SEAN HOWELL<span class="sep">/</span>WRITING</a>
+      <a class="back" href="/#writing">← back</a>
+    </div>
+
+    <header class="essay-header">
+      <p class="eyebrow">essay</p>
+      <h1>AI as the Control Plane for Impossible Machines</h1>
+      <p class="dek">Why utility-scale quantum computers, autonomous laboratories, advanced fabs, and large robotic systems will need advanced AI as an operating layer—not as a convenience feature, but as part of the machine.</p>
+      <p class="date">February 2026</p>
+    </header>
+
+    <article class="article">
+
+      <p>I have spent enough time around quantum hardware, control stacks, and AI-driven scientific workflows to think the answer is settled: the most important machines we build in the next decade will not be operable at scale without advanced AI. A utility-scale quantum computer is not just a better chip. It is a heterogeneous system of chips, control electronics, cryogenics, networking, compilers, decoders, schedulers, data systems, and operators tied together by feedback loops. An autonomous laboratory has the same shape. So does a modern chip fab. So does any serious multi-robot installation. Once you cross a certain threshold of scale and coupling, human operators stop being the runtime. They become the supervisory layer.</p>
+
+      <h2>Quantity has a quality of its own</h2>
+
+      <p>What changes at scale is not just size; it is category. IBM's roadmap now talks openly about modular systems, multiple quantum processors linked in a data-center environment, real-time decoding, and a path to 200 logical qubits running 100 million gates by 2029.<sup class="note"><a href="#ref1">1</a></sup> Google's recent Willow results make the same point from another direction: useful applications are expected to need billions if not trillions of reliable operations, and the latest error-correction results already depend on classical software built around machine learning, reinforcement learning, graph-based decoding, and real-time measurement processing.<sup class="note"><a href="#ref2">2</a></sup> Photonic roadmaps push the infrastructure logic further still: foundry-scale wafer production, cryogenic cabinets supporting hundreds of chips, and dedicated characterization and calibration facilities treated as part of the machine rather than as support functions.<sup class="note"><a href="#ref3">3</a></sup></p>
+
+      <p>That is the real shift. The bottleneck is no longer whether an isolated component can hit a target fidelity or throughput number. The bottleneck is whether the whole system can keep itself inside a viable operating envelope while objectives, workloads, and physical conditions change. At utility scale you are managing drift, correlated failures, latency budgets, maintenance windows, admission control, and scheduling across layers that were once treated as separate disciplines. This is a cross-stack control problem.</p>
+
+      <div class="pullquote">
+        <p>At utility scale, the hard part is not building a machine that works once. It is building one that can keep working while everything around it moves.</p>
+      </div>
+
+      <p>In my own work, I keep coming back to the same pattern: architecture search, photonic design, calibration, error correction, compilers, experimental workflows, and system operations are converging into one continuous optimization problem. We draw boundaries for organizational convenience, but the machine does not respect them. A change in device design changes calibration burden. A change in decoder latency changes useful algorithm depth. A change in scheduling policy changes the shape of the error budget. Once you see the system whole, it becomes hard to imagine scaling it with disconnected tools.</p>
+
+      <h2>Why rules are not enough</h2>
+
+      <p>We already know how to automate narrow loops. FPGAs, control firmware, recipe engines, advanced process control, and carefully tuned heuristics remain essential. I am not arguing that advanced AI replaces those tools. Low-level control should remain as deterministic, testable, and boring as we can make it. The problem is that fixed automation does not scale cleanly into environments that are high-dimensional, partially observed, nonstationary, and safety-constrained. Hand-built rules work until they collide with a regime change, a new operating point, or an interaction that no one explicitly encoded.</p>
+
+      <p>Advanced AI matters because it can sit above and across those loops. It can fuse multimodal telemetry, learn surrogate models where first-principles simulation is too slow, infer latent state from messy data, rank interventions by expected value, and plan under uncertainty. In a quantum system, that means deciding what to recalibrate and when, rerouting workloads around drifting subsystems, trading decoder latency against logical fidelity, and translating application intent into live resource allocation. In a fab, it means detecting excursions earlier and navigating thousands of interdependent process variables. In a large robotic system, it means coordinating perception, planning, task allocation, and failure recovery without drowning operators in exception handling.</p>
+
+      <h2>The pattern</h2>
+
+      <p>None of this is speculative. Berkeley Lab's A-Lab was built as a closed-loop materials discovery system and reports throughput on the order of 50 to 100 times a human operator, with 24/7 operation and 100–200 samples per day.<sup class="note"><a href="#ref4">4</a></sup> The corresponding <em>Nature</em> paper reported 41 novel compounds realized from 58 targets in 17 days of continuous operation.<sup class="note"><a href="#ref5">5</a></sup> In semiconductor manufacturing, Applied Materials publicly describes platforms that take millions of measurements across wafers and individual chips while optimizing thousands of process variables in real time, spanning research, ramp, and high-volume manufacturing.<sup class="note"><a href="#ref6">6</a></sup></p>
+
+      <p>These are early forms of the same architecture: a machine whose performance depends as much on orchestration, inference, and adaptive decision-making as on the raw capability of any single instrument. Once that architecture appears, the separation between "the machine" and "the software that helps run it" starts to break down. The software is part of the system's achievable operating regime.</p>
+
+      <h2>What "advanced AI" actually means here</h2>
+
+      <p>When I say advanced AI, I do not mean a chatbot bolted onto a dashboard. I mean models that understand time series, logs, images, layouts, text, and simulator output together; agents that can propose and evaluate actions; and policy layers that enforce hard constraints before anything touches hardware. The architecture I have in mind is conservative where it must be and adaptive where it can be. Hard real-time control stays classical. Safety interlocks stay explicit. AI handles orchestration, diagnosis, forecasting, design-space search, and cross-layer optimization.</p>
+
+      <p>The same AI stack that will operate these systems is already useful in designing them. Architecture discovery, photonic inverse design, decoder search, compiler co-optimization, experiment planning, and resource estimation are all versions of the same problem: exploring very large design spaces under hard physical constraints. The boundary between design-time AI and runtime AI is going to blur.</p>
+
+      <p>Of course, this only works if the AI layer is engineered like critical infrastructure rather than consumer software. That means data provenance, audit trails, simulator-in-the-loop evaluation, rollback, calibrated uncertainty, action whitelists, structured escalation, and continuous benchmarking against baselines. Humans still set goals, define invariants, approve policy, and own accountability. But asking humans to be the real-time operating system for million-component scientific infrastructure is not realism. It is nostalgia.</p>
+
+      <h2>Practical consequences</h2>
+
+      <p>If we want utility-scale quantum computers, self-driving laboratories, next-generation fabs, or large robotic installations to work in the next decade, we should stop treating AI as an optional accelerator for decoders, compilers, lab notebooks, or operations dashboards. We should design it as part of the control plane from the start. That means instrumenting every subsystem for learning, building simulators and digital twins alongside hardware, exposing clean operational abstractions, and creating policy engines that can mediate between human intent and machine action.</p>
+
+      <p>I think this is one of the deepest engineering shifts now underway. For a long time, intelligence sat outside the machine: the scientist at the bench, the operator in the control room, the engineer on call. The systems now arriving are too dynamic, too coupled, and too large for that model. They need an adaptive layer between human intent and physical execution. In practice, that layer will be advanced AI. For utility-scale quantum computers especially, it will matter as much as the qubits themselves.</p>
+
+    </article>
+
+    <section class="sources" aria-labelledby="sources-heading">
+      <h2 id="sources-heading">sources</h2>
+      <ol>
+        <li id="ref1">
+          IBM Quantum,
+          <a href="https://www.ibm.com/quantum/hardware">"Hardware for useful quantum computing"</a>,
+          accessed March 29, 2026; and IBM Quantum Blog,
+          <a href="https://www.ibm.com/quantum/blog/large-scale-ftqc">"How IBM will build the world's first large-scale, fault-tolerant quantum computer"</a>,
+          June 10, 2025.
+        </li>
+        <li id="ref2">
+          Google Research,
+          <a href="https://research.google/blog/making-quantum-error-correction-work/">"Making quantum error correction work"</a>,
+          December 9, 2024.
+        </li>
+        <li id="ref3">
+          PsiQuantum,
+          <a href="https://www.psiquantum.com/about">"About"</a>,
+          accessed March 29, 2026; and PsiQuantum,
+          <a href="https://www.psiquantum.com/news-import/omega">"PsiQuantum Announces Omega, a Manufacturable Chipset for Photonic Quantum Computing"</a>,
+          February 26, 2025.
+        </li>
+        <li id="ref4">
+          Berkeley Lab,
+          <a href="https://newscenter.lbl.gov/2023/04/17/meet-the-autonomous-lab-of-the-future/">"Meet the Autonomous Lab of the Future"</a>,
+          April 17, 2023.
+        </li>
+        <li id="ref5">
+          Nathan J. Szymanski et al.,
+          <a href="https://www.nature.com/articles/s41586-023-06734-w">"An autonomous laboratory for the accelerated synthesis of inorganic materials"</a>,
+          <em>Nature</em>, 2023.
+        </li>
+        <li id="ref6">
+          Applied Materials,
+          <a href="https://investor.appliedmaterials.com/news-releases/news-release-details/applied-materials-aix-platform-harnesses-power-big-data-and-ai/">"Applied Materials AI(x) Platform Harnesses the Power of Big Data and AI to Accelerate Semiconductor Technology Breakthroughs from Lab to Fab"</a>,
+          April 5, 2021.
+        </li>
+      </ol>
+    </section>
+
+    <div class="bottom-strip">
+      <a class="back" href="/#writing">← back to writing</a>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    &copy; Sean Howell. Built with HTML &amp; CSS. Set in Berkeley Mono and IBM Plex Sans.
+  </footer>
+
+</body>
+</html>
