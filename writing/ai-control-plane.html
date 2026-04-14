@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AI as the Control Plane for Impossible Machines — Sean Howell</title>
-  <meta name="description" content="Why utility-scale quantum computers, autonomous laboratories, advanced fabs, and large robotic systems will need advanced AI as an operating layer—not as a convenience feature, but as part of the machine.">
+  <title>AI as the Control Plane for Impossible Machines</title>
+  <meta name="description" content="Why utility-scale quantum computers, autonomous laboratories, advanced fabs, and large robotic systems will need advanced AI built into the machine as an operating layer.">
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="/style.css">
 </head>
@@ -19,17 +19,17 @@
     <header class="essay-header">
       <p class="eyebrow">essay</p>
       <h1>AI as the Control Plane for Impossible Machines</h1>
-      <p class="dek">Why utility-scale quantum computers, autonomous laboratories, advanced fabs, and large robotic systems will need advanced AI as an operating layer—not as a convenience feature, but as part of the machine.</p>
+      <p class="dek">Why utility-scale quantum computers, autonomous laboratories, advanced fabs, and large robotic systems will need advanced AI built into the machine as an operating layer.</p>
       <p class="date">February 2026</p>
     </header>
 
     <article class="article">
 
-      <p>I have spent enough time around quantum hardware, control stacks, and AI-driven scientific workflows to think the answer is settled: the most important machines we build in the next decade will not be operable at scale without advanced AI. A utility-scale quantum computer is not just a better chip. It is a heterogeneous system of chips, control electronics, cryogenics, networking, compilers, decoders, schedulers, data systems, and operators tied together by feedback loops. An autonomous laboratory has the same shape. So does a modern chip fab. So does any serious multi-robot installation. Once you cross a certain threshold of scale and coupling, human operators stop being the runtime. They become the supervisory layer.</p>
+      <p>I have spent enough time around quantum hardware, control stacks, and AI-driven scientific workflows to think the answer is settled: the most important machines we build in the next decade will not be operable at scale without advanced AI. A utility-scale quantum computer is a heterogeneous system of chips, control electronics, cryogenics, networking, compilers, decoders, schedulers, data systems, and operators tied together by feedback loops. An autonomous laboratory has the same shape. So does a modern chip fab. So does any serious multi-robot installation. Once you cross a certain threshold of scale and coupling, human operators stop being the runtime. They become the supervisory layer.</p>
 
       <h2>Quantity has a quality of its own</h2>
 
-      <p>What changes at scale is not just size; it is category. IBM's roadmap now talks openly about modular systems, multiple quantum processors linked in a data-center environment, real-time decoding, and a path to 200 logical qubits running 100 million gates by 2029.<sup class="note"><a href="#ref1">1</a></sup> Google's recent Willow results make the same point from another direction: useful applications are expected to need billions if not trillions of reliable operations, and the latest error-correction results already depend on classical software built around machine learning, reinforcement learning, graph-based decoding, and real-time measurement processing.<sup class="note"><a href="#ref2">2</a></sup> Photonic roadmaps push the infrastructure logic further still: foundry-scale wafer production, cryogenic cabinets supporting hundreds of chips, and dedicated characterization and calibration facilities treated as part of the machine rather than as support functions.<sup class="note"><a href="#ref3">3</a></sup></p>
+      <p>At scale, the problem changes category. IBM's roadmap now talks openly about modular systems, multiple quantum processors linked in a data-center environment, real-time decoding, and a path to 200 logical qubits running 100 million gates by 2029.<sup class="note"><a href="#ref1">1</a></sup> Google's recent Willow results make the same point from another direction: useful applications are expected to need billions if not trillions of reliable operations, and the latest error-correction results already depend on classical software built around machine learning, reinforcement learning, graph-based decoding, and real-time measurement processing.<sup class="note"><a href="#ref2">2</a></sup> Photonic roadmaps push the infrastructure logic further still: foundry-scale wafer production, cryogenic cabinets supporting hundreds of chips, and dedicated characterization and calibration facilities treated as part of the machine rather than as support functions.<sup class="note"><a href="#ref3">3</a></sup></p>
 
       <p>That is the real shift. The bottleneck is no longer whether an isolated component can hit a target fidelity or throughput number. The bottleneck is whether the whole system can keep itself inside a viable operating envelope while objectives, workloads, and physical conditions change. At utility scale you are managing drift, correlated failures, latency budgets, maintenance windows, admission control, and scheduling across layers that were once treated as separate disciplines. This is a cross-stack control problem.</p>
 
