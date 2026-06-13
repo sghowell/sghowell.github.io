@@ -129,6 +129,11 @@ body {
   border-bottom-color: var(--fg);
 }
 
+.anchor-rail a[aria-current="page"] {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
+}
+
 .anchor-rail .sep {
   margin: 0 6px;
   color: var(--faint);
