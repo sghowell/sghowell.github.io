@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Harness Engineering for Scientific Agents</title>
+  <meta name="description" content="Why the harness discipline forming around coding agents has to be rebuilt for agents that do science, and what five months of benchmarks, automated harness search, and gated laboratory control did to the framework.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="essay">
+  <main class="container">
+
+    <div class="top-strip">
+      <a class="brand" href="/">SEAN HOWELL<span class="sep">/</span>WRITING</a>
+      <a class="back" href="/writing/">← back</a>
+    </div>
+
+    <header class="essay-header">
+      <p class="eyebrow">essay</p>
+      <h1>Harness Engineering for Scientific Agents</h1>
+      <p class="dek">Why the harness discipline forming around coding agents has to be rebuilt for agents that do science, and what five months of benchmarks, automated harness search, and gated laboratory control did to the framework.</p>
+      <p class="date">August 2026 &middot; second edition</p>
+    </header>
+
+    <article class="article">
+
+      <h2>abstract</h2>
+
+      <p>The first edition of this paper argued that the harness engineering discipline forming around coding agents would have to be rebuilt for agents that do science, and proposed a five-component framework for doing so. This edition tests that argument against five months of results: a settled taxonomy for coding harnesses, automated harness search with evidence about what transfers, the first end-to-end benchmarks for autonomous research, a policy-level statement of the validation bottleneck from Google DeepMind, and the first formally gated LLM control of a physical quantum experiment.</p>
+
+      <p>The framework mostly held. Verification moved from one component among five to the organizing concern, and the verification stack is recut along the computational/inferential line. Three things the first edition underweighted are named: certificates, harness pruning, and the non-transfer of prose. The open problems are updated, and notes from running a certificate-gated harness on a fault-tolerant photonic quantum computing problem program are included.</p>
+
+      <h2>Why a second edition</h2>
+
+      <p>I wrote the first version of this in March,<sup class="note"><a href="#ref29">29</a></sup> about six weeks after the term &ldquo;harness engineering&rdquo; showed up. At the time there were three primary sources, all about coding agents, and I was arguing by extrapolation that scientific agents would need something structurally different. Five months later the extrapolation has mostly been tested, some of it by people with far more resources than I have, and I have run a certificate-gated harness of my own long enough to have opinions grounded in something other than analogy.</p>
+
+      <p>The core claim held. The five-component framework held, though I would recut one of the components. Three things I underweighted turned out to matter a lot, and I will say what they were. The field also produced a set of numbers that I did not have in March and that change the tone of the argument: the benchmarks are in, and they are not flattering to anyone.</p>
+
+      <p>This edition is written to be read on its own. Where I refer back to the March version I say so.</p>
+
+      <h2>1. The state of the coding-agent harness</h2>
+
+      <p>The vocabulary settled faster than I expected. Birgitta Böckeler&rsquo;s April piece on martinfowler.com gave the field its working taxonomy, borrowed from control theory:<sup class="note"><a href="#ref7">7</a></sup> a harness is made of guides (feedforward controls that shape what the agent does before it acts) and sensors (feedback controls that observe what it did and push a correction back). Each of those comes in two execution types, computational (deterministic, fast, a linter or a structural test) and inferential (an LLM reading the output and forming an opinion). Feedforward only gives you an agent that follows rules but never learns whether they worked. Feedback only gives you an agent that repeats the same mistake until the sensor catches it. You need both, and the interesting design questions are about where each one sits in the loop and how expensive it is to run.</p>
+
+      <p>I am adopting that vocabulary here because it is better than what I had. My March verification stack was ordered by cost, which is a fine axis but not the load-bearing one. The computational versus inferential split is load-bearing, because it tells you which checks you can trust unconditionally and which ones you cannot.</p>
+
+      <p>The second thing that happened is that harnesses started being searched rather than written. Lin et al. (arXiv 2604.25850, April)<sup class="note"><a href="#ref9">9</a></sup> closed a loop in which observability data over agent trajectories drives automatic mutation of the harness around a frozen model. The evolved harness transfers across model families and yields gains of 5 to 10 percentage points on Terminal-Bench 2. HarnessBank (arXiv 2607.13683, July)<sup class="note"><a href="#ref10">10</a></sup> does the same with a gene-bank and a screening gate to avoid evaluating every offspring, with reported gains of 5.1 to 15.4 percent across 7 benchmarks. Bilevel Autoresearch (arXiv 2603.23420)<sup class="note"><a href="#ref14">14</a></sup> puts a meta-loop over Karpathy&rsquo;s autoresearch loop and reports a 5x improvement on the same task.</p>
+
+      <p>The finding from that line of work that matters most for what follows is an ablation in the Lin paper: the gains localize to tools, middleware, and long-term memory, not to the system prompt. Structural changes to the harness transfer. Prose-level strategy does not. If you are going to spend engineering effort on a harness, spend it on things the model can call, not things the model reads.</p>
+
+      <figure class="fig">
+        <p class="fig-kicker">Harness controls: two axes</p>
+        <div class="fig-matrix">
+          <div class="mx-corner" aria-hidden="true"></div>
+          <div class="col-head">Computational<span>deterministic, fast, trusted</span></div>
+          <div class="col-head">Inferential<span>model-judged, slow, calibrate first</span></div>
+
+          <div class="row-head">Guides<span>feedforward, before the act</span></div>
+          <div class="fig-box">
+            <p class="box-label">Guides &middot; computational</p>
+            <ul>
+              <li>Typed tool schemas</li>
+              <li>Per-device bounds</li>
+              <li>Certificate formats</li>
+              <li>Structural constraints</li>
+            </ul>
+          </div>
+          <div class="fig-box">
+            <p class="box-label">Guides &middot; inferential</p>
+            <ul>
+              <li>Skills and protocols</li>
+              <li>AGENTS.md style maps</li>
+              <li>Domain briefings</li>
+              <li>Example figures</li>
+            </ul>
+          </div>
+
+          <div class="row-head">Sensors<span>feedback, after the act</span></div>
+          <div class="fig-box">
+            <p class="box-label">Sensors &middot; computational</p>
+            <ul>
+              <li>Unit and shape checks</li>
+              <li>Conservation and symmetry</li>
+              <li>Statistical validity of claims</li>
+              <li>Certificate checkers</li>
+            </ul>
+          </div>
+          <div class="fig-box">
+            <p class="box-label">Sensors &middot; inferential</p>
+            <ul>
+              <li>Consistency with prior results</li>
+              <li>Red-team falsification</li>
+              <li>Reviewer-style critique</li>
+              <li>Anomaly triage</li>
+            </ul>
+          </div>
+        </div>
+        <p class="fig-note">Gains from automated harness search localize in the left column (tools, middleware, memory), not in prose.</p>
+        <figcaption><b>Figure 1.</b> Harness controls cut two ways. Guides act before the agent does, sensors after; computational controls are deterministic and can be trusted outright, inferential ones are model judgments and need calibration. The March verification stack lived almost entirely in the bottom row.</figcaption>
+      </figure>
+
+      <p>The third development is a correction to something I got wrong by omission. Anthropic published a short design note in April<sup class="note"><a href="#ref5">5</a></sup> with a pattern I had not considered: remove harness assumptions as the model improves. A harness encodes beliefs about what the model cannot do on its own. Those beliefs go stale. The example they give is context resets that were built to compensate for a weaker model and had become dead weight by the time a stronger one shipped. The popular framing of harness engineering, from Hashimoto<sup class="note"><a href="#ref1">1</a></sup> and later Osmani, is a ratchet: every mistake becomes a permanent constraint, and the harness only tightens. That is right as far as it goes, but a harness that only tightens will eventually be doing work the model no longer needs, and it will do that work badly, because a constraint written for a weaker model is a ceiling for a stronger one.</p>
+
+      <p>The cautionary case in the other direction landed the same month. Anthropic traced a visible regression in Claude Code to three harness changes:<sup class="note"><a href="#ref6">6</a></sup> a default reasoning-effort downgrade, a caching bug that dropped thinking history from stale sessions, and a verbosity-limiting prompt that was too aggressive. None of those were model changes. All of them were harness changes made in good faith. If you needed evidence that the harness is a first-class engineering artifact that can break the product on its own, there it is.</p>
+
+      <p>So the coding-agent discipline now has: a taxonomy, automated search, evidence about what transfers, and a stated tension between ratcheting and pruning. That is a lot of progress for five months. It is also all still about coding agents.</p>
+
+      <h2>2. What the scientific-agent literature did in the same period</h2>
+
+      <h3>2.1 Autoresearch and the minimal loop</h3>
+
+      <p>Karpathy released autoresearch on 7 March.<sup class="note"><a href="#ref15">15</a></sup> It is about 630 lines across three files. The agent may edit one file, <em>train.py</em>, which is a single-GPU pretraining script derived from nanochat. It may not touch <em>prepare.py</em>, which scores the result. The loop is: read the code, propose a change, train for 5 minutes, keep the change if validation loss improved, otherwise git-revert, repeat. Karpathy&rsquo;s own 2-day run produced about 700 experiments and stacked 20 additive improvements. Within a month the repo had 66,000 stars.</p>
+
+      <p>I bring this up because it is the smallest possible scientific harness and it exposes every problem in the smallest possible form. The keep/revert decision is made on a single noisy run. Nobody repeats. Some improvements did not reproduce across sessions. The transfer claim from depth 12 to depth 24 is a hypothesis, not a result. A &ldquo;keep&rdquo; can be noise. Karpathy is aware of all of this and says so. The point is that the community&rsquo;s most popular scientific harness has no Layer 2. It has a metric and a revert, and that is enough to get real work done, and it is also enough to fool yourself in a way that compounds.</p>
+
+      <h3>2.2 The benchmarks arrived</h3>
+
+      <p>In March I had no numbers. Now there are three sets and they agree with each other.</p>
+
+      <p>ResearchClawBench (arXiv 2606.07591, June)<sup class="note"><a href="#ref17">17</a></sup> is 40 tasks across 10 domains, each derived from a real paper that is hidden from the agent. The agent gets the task description, related literature, raw data, and an executable environment, and has to produce the research. A score of 50 means you reproduced the target paper. The strongest autonomous agent, Claude Code, averages 21.5. The strongest single model through their lightweight harness, Opus 4.7, averages 20.7. Failures concentrate in three places: experimental protocol mismatch, evidence mismatch, and what the authors call missing scientific core. One of their case studies is a quantum characterization task where the agent stopped at the most obvious observable trend and never built the gate-counting fidelity model or ran the mirror-circuit inference the target paper needed. The execution was fine; the agent did not know what a physicist would consider done.</p>
+
+      <p>MLReplicate (arXiv 2605.16616, May)<sup class="note"><a href="#ref18">18</a></sup> asked 6 autonomous research systems to reproduce 8 ICML 2025 outstanding papers, then ran the outputs through automated conference-style review and then through human experts. Human reviewers found fabricated or unsupported claims in 59 percent of the papers that the automated review had accepted. The correlation between automated and human overall ratings was r = 0.29. The cheapest system beat the most expensive one on human evaluation despite a 38x difference in input tokens.</p>
+
+      <p>The verification-gap survey (arXiv 2608.05179, August)<sup class="note"><a href="#ref19">19</a></sup> audited the runnable autonomous-research systems in the literature. 38 percent release the seeds or traces needed to reproduce a run. 38 percent report any novelty-verification method. Of the 9 systems that claim closed-loop autonomy, 7 are mechanical re-runs and 1 is author-asserted with no external check. Their coding rule finds no LLM-era system that demonstrates an externally validated in-loop oracle. The one that does predates LLM agents.</p>
+
+      <p>I read these three papers as saying the same thing from three angles. The systems can execute the workflow. They cannot yet tell whether what they executed was science. And the automated judges we have been using to score them cannot tell either.</p>
+
+      <h3>2.3 The validation bottleneck, named</h3>
+
+      <p>DeepMind published a policy essay in July under the title &ldquo;Conjecture Machines.&rdquo;<sup class="note"><a href="#ref21">21</a></sup> It is written for funders rather than engineers, but the framing is the sharpest statement I have seen of the problem I was circling in March. Agents are conjecture machines: they make ideas and candidate solutions abundant and cheap. Refutations remain physical and institutional, and therefore slow and expensive. Popper&rsquo;s pair has become asymmetric in cost, and the validation gap in most disciplines is widening, not closing. Thang Luong, who led the Aletheia effort, puts it as &ldquo;proof indigestion&rdquo;: AI generates results faster than humans can review them.</p>
+
+      <p>A coding-agent paper from June says the same thing about its own domain. &ldquo;The Verification Horizon&rdquo; (arXiv 2606.26300)<sup class="note"><a href="#ref13">13</a></sup> argues that the classical asymmetry, where checking a solution is easier than finding one, is reversing for coding agents. Generation has become the easy part. Reliable verification has become the hard part, and no single mechanism will solve it.</p>
+
+      <figure class="fig">
+        <p class="fig-kicker">The validation gap (schematic)</p>
+        <div class="fig-chart">
+          <div class="plot">
+            <p class="axis-y">throughput per unit cost</p>
+            <svg class="fig-svg" viewBox="0 0 425 250" role="img" aria-label="Schematic chart. A solid conjectures curve rises exponentially from 2023 to 2026 while a dashed refutations curve stays nearly flat, and the widening shaded area between them is labelled gap.">
+              <polygon class="gap-fill" points="44,214 80.8,211 117.6,207 154.4,201 191.2,193 228,182 264.8,167 301.6,146 338.4,118 375.2,78 412,24 412,178 375.2,187.5 338.4,195 301.6,200.5 264.8,204.5 228,207.5 191.2,210 154.4,212 117.6,213.5 80.8,215 44,216"/>
+              <polyline class="curve dash" points="44,216 80.8,215 117.6,213.5 154.4,212 191.2,210 228,207.5 264.8,204.5 301.6,200.5 338.4,195 375.2,187.5 412,178"/>
+              <polyline class="curve" points="44,214 80.8,211 117.6,207 154.4,201 191.2,193 228,182 264.8,167 301.6,146 338.4,118 375.2,78 412,24"/>
+              <path class="axis" d="M44,18 V222 H412.8"/>
+              <path class="tick" d="M352,100 H361.6 M356.8,100 V189 M352,189 H361.6"/>
+              <text class="gap-label" x="346.4" y="149" text-anchor="end">gap</text>
+            </svg>
+            <p class="axis-x">time, 2023 to 2026</p>
+          </div>
+          <ul class="legend">
+            <li>
+              <i class="swatch" aria-hidden="true"></i>
+              <b>conjectures</b>
+              <span>ideas, candidates, proofs, code</span>
+            </li>
+            <li>
+              <i class="swatch dashed" aria-hidden="true"></i>
+              <b>refutations</b>
+              <span>bench time, review, replication</span>
+            </li>
+          </ul>
+        </div>
+        <p class="fig-note">Where a certificate exists (a Lean proof, a checker), refutation follows the upper curve.</p>
+        <figcaption><b>Figure 2.</b> Schematic. Agents make conjectures cheap; refutation remains bench time and human review. The gap is the whole problem. Domains with a certificate format collapse it.</figcaption>
+      </figure>
+
+      <p>That is the most important fact about scientific agents in 2026, and it reorders the framework. In March I listed verification as one component among five, which understates it. The other four exist to serve it.</p>
+
+      <h3>2.4 Mathematics as the accelerated testbed</h3>
+
+      <p>The math results of May are worth stating carefully because they show what verification looks like when the domain cooperates. On 20 May OpenAI reported that an internal model produced the key ideas that disprove the Erdős unit distance conjecture, an open problem in discrete geometry, and a group of mathematicians then checked, refined, and published the argument.<sup class="note"><a href="#ref22">22</a></sup> Separately, DeepMind&rsquo;s Aletheia solved 6 of the 10 problems in the First Proof challenge, a set of unpublished research problems held out from training data. Aletheia pairs a proof generator with a natural-language verifier that sends flaws back for revision.</p>
+
+      <p>Two verification regimes, then. One is natural-language reasoning checked by humans, which scales like humans. The other is formal, where the proof is expressed in Lean and the machine confirms it. The formal regime scales like compute. DeepMind&rsquo;s own framing is that math is the accelerated testbed for the rest of science, because it is the one field where refutation can be made as cheap as conjecture, and the tooling built there (certificate-checked artifacts, generator-verifier pairing, structured handoff between the two) is the tooling every other field will need adapted.</p>
+
+      <p>I agree with that, and I should have said it in March. I underweighted certificates.</p>
+
+      <h3>2.5 The physical world</h3>
+
+      <p>This is the part of the March paper that was pure extrapolation, and it is the part where the most concrete progress happened.</p>
+
+      <p>A Duke group (arXiv 2606.27231, June)<sup class="note"><a href="#ref23">23</a></sup> put an LLM agent in the loop on a trapped-ion experiment with a formal per-operation safety boundary. The agent writes native ARTIQ control code. It reaches hardware only through an MCP server, and no tool call executes unless it carries a single-use authorization token bound to the exact contents of the call. Tokens are issued two ways: automatically, by running the proposed script in an isolated hardware simulation (dax.sim) and checking every operation against preset per-device bounds; or manually, by a human, for actions classed as sensitive. An AST checker enforces a denylist before anything runs. They validated the filter with about 1,932 bench scripts and 250 harness-level tests, mapped where the protection ends, and deployed on co-trapped Ca+/CaOH+ and Yb+ crystals.</p>
+
+      <p>That is the authority model from my March paper, built, with one refinement I had not specified: the automatic path to authorization runs the action in simulation first. Sim-then-execute is the mechanism by which capability, policy, and competence get checked in one pass. I will come back to this.</p>
+
+      <p>A-Lab GPSS (arXiv 2604.11957, April)<sup class="note"><a href="#ref25">25</a></sup> ran a 352-sample campaign on air-sensitive lithium halide spinels with LLM agents split into an abductive role (spot the anomaly) and an inductive role (find the pattern). The hit rate for materials with both good ionic conductivity and high spinel purity rose from 1.33 percent in the first 75 samples to 5.33 percent in the last 75. The authors&rsquo; own limitations section is the interesting part: the agents kept invoking cation-ordering effects to explain conductivity differences, and the lab had no characterization tool that could confirm or deny that. The hypothesis was unfalsifiable inside the loop, so it stayed a hypothesis and kept steering experiments. Their two stated next steps are more characterization modalities and calibrated uncertainty so the agent can defer to a human when it does not know.</p>
+
+      <p>And a July paper (arXiv 2607.04508)<sup class="note"><a href="#ref26">26</a></sup> builds an agentic self-driving lab explicitly around the validation bottleneck. Their framing sentence: the rate-limiter has shifted, and the physical experiment, not the agent turn, now dominates the schedule for high-value low-throughput science. Their mechanism is an uncertainty-gated agent that trusts a cheap surrogate prediction only when its calibrated uncertainty is low, and triggers a real measurement otherwise. That is the multi-fidelity promotion I described in March with the promotion criterion made explicit.</p>
+
+      <h2>3. The framework, revised</h2>
+
+      <p>The March paper proposed five components: a knowledge mesh, an authority model, a verification stack, an experimental planner, and a provenance layer. Here is each one with what the last five months did to it.</p>
+
+      <h3>3.1 Knowledge mesh</h3>
+
+      <p>I argued that the repository cannot be the single source of truth for a scientific agent, because scientific knowledge lives across instruments, databases, literature, and the people who run the lab, and that the replacement is a queryable graph the agent pulls from rather than a document it is handed.</p>
+
+      <p>The field&rsquo;s partial answer is agent skills. DeepMind&rsquo;s science-skills repository and the broader skills convention let a scientist write down a piece of methodological craft as a text file the agent can load. Latysheva&rsquo;s description in the DeepMind essay<sup class="note"><a href="#ref21">21</a></sup> is that she has distilled parts of her research process into skills, and that research will shift from execution to orchestration. That is real, and it moves some tacit knowledge out of heads and into files.</p>
+
+      <p>But skills are prose, and the Lin ablation says prose is the part of the harness that does not transfer. I take that as evidence for the March position rather than against it. A skill that says &ldquo;when the Ramsey fringe looks like this, the qubit has drifted&rdquo; is a guide. What the agent needs at the moment of decision is a sensor: a fitted model that reports drift with an uncertainty, which the agent can call. The knowledge mesh should be mostly callables with typed outputs and mostly not documents. Where a piece of knowledge cannot be made callable, it should be written down anyway, with the understanding that it is the weakest layer of the mesh.</p>
+
+      <h3>3.2 Authority model</h3>
+
+      <p>The March version defined effective authority as the intersection of what the agent can do (capability), what it may do (policy), and what it has demonstrated it can do (competence). The Duke system is that model with an implementation detail I now think is the important part. Their automatic path to authorization is a simulation run. The proposed script executes against a hardware model, every operation is checked against per-device bounds, and only a clean trace earns a token. The token is bound to the exact call contents, so the agent cannot get authorization for one thing and do another.</p>
+
+      <p>What the sim-gate buys you is that policy and competence are checked by the same mechanism. Policy is the bounds. Competence is whether the script, run against the model, does something sensible. You do not need a separate certification eval for the competence dimension if every action is rehearsed before it is performed. You do need a good enough simulator, which in quantum control is not a given, and you need to know where the simulator is wrong, which is the same problem as knowing where the agent&rsquo;s world model is wrong.</p>
+
+      <p>The manual path for sensitive actions is the escalation protocol. Their design classifies actions rather than trusting the agent to know when to ask, which is correct. An agent&rsquo;s judgment about whether an action is dangerous is exactly the judgment you are trying not to rely on.</p>
+
+      <figure class="fig">
+        <p class="fig-kicker">Simulation-gated authorization</p>
+        <div class="fig-auth">
+          <div class="reject">
+            <div class="fig-box">
+              <b>Reject</b>
+              <span class="sub">structured reason, not prose</span>
+            </div>
+            <span class="up" aria-hidden="true">↑</span>
+          </div>
+          <div class="fig-flow">
+            <div class="node">
+              <b>Agent</b>
+              <span class="sub">proposes a tool call</span>
+            </div>
+            <div class="arrow" aria-hidden="true"><span>→</span></div>
+            <div class="node">
+              <b>AST check</b>
+              <span class="sub">denylist, static bounds</span>
+            </div>
+            <div class="arrow" aria-hidden="true"><span>→</span></div>
+            <div class="node">
+              <b>Simulate</b>
+              <span class="sub">run against device model</span>
+            </div>
+            <div class="arrow wide"><span aria-hidden="true">→</span><em>single-use token</em></div>
+            <div class="node invert">
+              <b>Hardware</b>
+              <span class="sub">executes exact contents</span>
+            </div>
+          </div>
+          <p class="checks-head">what the rehearsal checks</p>
+          <dl class="checks">
+            <div><dt>capability</dt><dd>tool exists in registry</dd></div>
+            <div><dt>policy</dt><dd>every op inside per-device bounds</dd></div>
+            <div><dt>competence</dt><dd>trace does something sensible</dd></div>
+          </dl>
+          <div class="fig-box operator">
+            <b>Human operator</b>
+            <span class="sub">sensitive class: manual token, issued outside the sim-gate</span>
+          </div>
+        </div>
+        <p class="fig-note">Effective authority = capability ∩ policy ∩ competence, checked in one rehearsal. The rehearsal is only as good as the device model is current.</p>
+        <figcaption><b>Figure 3.</b> The authority model as the Duke group built it. Every proposed call is rehearsed in simulation against per-device bounds before it can earn a token; the token is bound to the exact contents; sensitive classes route to a human. Rejections should be structured so the refine step cannot argue with them.</figcaption>
+      </figure>
+
+      <p>I would add one thing from experience. Authority should decay. A competence certification earned against last month&rsquo;s device state should not be worth as much this month. Physical systems drift, and a token-issuing simulator that is not re-fitted to the current device is issuing tokens against a fiction.</p>
+
+      <h3>3.3 Verification stack</h3>
+
+      <p>This is the component I would recut. The March version was five layers ordered by cost, from syntactic through physical, statistical, contextual, and adversarial. The layering is still right; the axis is wrong. Cut it along Böckeler&rsquo;s line instead.</p>
+
+      <p>Computational verification is anything a deterministic program can decide: units, shapes, bounds, conservation laws, symmetries, statistical validity of a claimed uncertainty given the sample. Everything in my old Layers 0 through 2. These checks can be trusted unconditionally, they are cheap, and every output should pass through all of them. When a domain admits a certificate, meaning an artifact that a checker can validate without trusting the process that produced it, the certificate belongs here. A Lean proof is a certificate. A stabilizer tableau that reproduces a claimed fidelity is a certificate. A syndrome history that decodes to the claimed logical error rate is a certificate.</p>
+
+      <p>Inferential verification is anything that requires a model to form an opinion: is this result consistent with prior work, is this discrepancy explained, would a skeptical reviewer accept this argument. My old Layers 3 and 4. These checks are expensive, they cannot be trusted unconditionally, and MLReplicate&rsquo;s r = 0.29 between automated and human review is the current best estimate of how far you should trust them: not far. The 59 percent fabricated-claim rate among automated acceptances is what happens when inferential verification is the last line of defense.</p>
+
+      <p>The engineering consequence is that the job is to push as much of the stack as possible into the computational band, which is what certificates do and why math is ahead. And it is the thing I underweighted in March, when I treated the discovery-versus-drift problem as inherently epistemic. Part of it is. But a lot of what looks epistemic is a domain that has not yet built its certificate format, and building one is engineering, not philosophy.</p>
+
+      <figure class="fig">
+        <p class="fig-kicker">Verification stack, recut</p>
+        <div class="fig-stack">
+          <div class="band band-inf">Inferential<span>r = 0.29 vs expert review; calibrate before trusting</span></div>
+          <div class="layer">
+            <b>Adversarial</b>
+            <span>red-team attempts to falsify the argument</span>
+          </div>
+          <div class="layer">
+            <b>Contextual</b>
+            <span>consistent with prior results, discrepancy explained</span>
+          </div>
+          <div class="frontier" aria-hidden="true"></div>
+          <div class="frontier-note">↑ certificate frontier<span>moves up as a domain builds its formats</span></div>
+          <div class="band band-comp">Computational<span>trusted unconditionally, every output, every time</span></div>
+          <div class="layer">
+            <b>Certificate</b>
+            <span>artifact a checker validates without trusting the generator</span>
+          </div>
+          <div class="layer">
+            <b>Statistical</b>
+            <span>is the claimed uncertainty earned</span>
+          </div>
+          <div class="layer">
+            <b>Physical</b>
+            <span>conservation, symmetry, bounds</span>
+          </div>
+          <div class="layer">
+            <b>Syntactic</b>
+            <span>parse, units, shapes, ranges</span>
+          </div>
+        </div>
+        <p class="fig-note">The job is to move layers below the frontier. Math has moved most of them; wet-lab biology has moved almost none.</p>
+        <figcaption><b>Figure 4.</b> The verification stack recut along the computational/inferential line. Certificates sit at the top of the computational band and the frontier moves up as domains learn to write them. Below the frontier, checks are cheap and trusted; above it, they are expensive and, at present, poorly correlated with expert judgment.</figcaption>
+      </figure>
+
+      <p>The tension DeepMind names in the essay, between agents tuned for caution that drift toward the known and agents tuned for originality that go astray, is the discovery-versus-drift problem from March restated. I do not think tuning resolves it. Cheap refutation does, because an agent tuned for originality can then be wrong often at low cost. Where refutation is expensive the tuning question is real and there is no good answer.</p>
+
+      <h3>3.4 Experimental planner</h3>
+
+      <p>The March version had four responsibilities: cost-aware selection, multi-fidelity routing, batch design, and abort-and-pivot. The routing piece now has a stated promotion criterion from the validation-bottleneck paper: promote to the next fidelity when the current level&rsquo;s calibrated uncertainty is low enough to trust, and measure otherwise. That is cleaner than what I wrote.</p>
+
+      <p>The abort-and-pivot piece I would reframe entirely. Sibyl-AutoResearch (arXiv 2605.22343, May)<sup class="note"><a href="#ref16">16</a></sup> diagnoses where autonomous research systems lose the lessons of their own trials: weak evidence becomes prose, pilot signals become broad claims, memory stays textual, and recurring process failures do not change later behavior. Their fix is two auditable conversion units. Trial-to-behavior conversion links a trial signal to a later research action, so that a failed experiment demonstrably changes the next plan. Trial-to-harness-behavior conversion links a recurring process failure to a change in the harness itself. In a strong harness, they say, past trials change future research behavior and recurring failures change the harness. That is agent-harness co-evolution, and it is a better description of what the planner should be doing than &ldquo;know when to pivot.&rdquo; The planner is the place where trial history is converted into the next action, and the conversion has to be inspectable or you cannot tell whether it happened.</p>
+
+      <p>The rate-limiter observation belongs here too. If the physical experiment dominates the schedule, then agent turns are nearly free relative to measurements, and the planner should be spending them. Run the simulation 10 more times. Fit the surrogate again. Have the adversarial check argue with itself. The budget that matters is bench time, and every turn spent reducing uncertainty before touching the bench is well spent.</p>
+
+      <h3>3.5 Provenance</h3>
+
+      <p>I wrote in March that provenance is a requirement of scientific integrity. The August survey says 38 percent of runnable systems release enough to reproduce a run.<sup class="note"><a href="#ref19">19</a></sup> So it is a requirement that almost nobody meets.</p>
+
+      <p>Two concrete mechanisms have appeared. AutoResearchClaw (arXiv 2605.20025)<sup class="note"><a href="#ref20">20</a></sup> uses a verified-result registry that blocks ungrounded numerical claims from strict sections of a generated paper, and a citation-verification pipeline that removes references it cannot resolve. That is provenance as a gate rather than a log, and it is the right shape: a claim that cannot be traced to a registered result does not get written. DeepMind proposes Human-AI Interaction Cards,<sup class="note"><a href="#ref21">21</a></sup> short records of the prompts and outputs that produced the key insight in a piece of work, as an artifact for reviewers.</p>
+
+      <p>The uncertainty budget I asked for in March is still missing from essentially every system I have looked at. A-Lab GPSS&rsquo;s authors ask for calibrated uncertainty as a next step. The validation-bottleneck paper builds its whole promotion mechanism on it. It is the piece of provenance that would most change agent behavior if it existed, because an agent that has to carry an uncertainty budget forward cannot quietly convert a pilot signal into a broad claim; the budget would not close.</p>
+
+      <h2>4. Notes from running one</h2>
+
+      <p>Empiricist is a certificate-gated generate-verify-refine harness I have been running against a 10-problem program in fault-tolerant photonic quantum computing since spring. Two of the 10 problems are fully certified as of this writing. I keep Empiricist-produced results strictly separate from results I got by hand, and I say which is which every time, because the provenance discipline is the point.</p>
+
+      <p>A few things I did not expect.</p>
+
+      <p>The certificate format is most of the work. Deciding what artifact a checker can validate without trusting the generator is a design problem in its own right, and it is domain-specific in a way that resists templates. For a fusion-network problem the certificate might be a stabilizer computation the checker re-runs; for a threshold claim it is a decoder run on held-out syndromes with a stated confidence interval. Getting the format right took longer than building the loop, and the two problems that certified are the two where the format was cleanest.</p>
+
+      <p>Refine is where drift happens. Generate produces candidates, verify rejects most of them, and the refine step takes the rejection and tries again. If the rejection message is prose, the refine step reasons about the prose, and it can convince itself the checker was wrong. If the rejection is structured (which constraint, which value, by how much), refine has less room to argue. Sibyl&rsquo;s &ldquo;weak evidence becomes prose&rdquo; is the same failure in the other direction.</p>
+
+      <p>The agent&rsquo;s confidence is uninformative. The cases where it was surest were not the cases that certified. I stopped reading its confidence statements about halfway through and started reading only the checker output, which is what the computational band is for.</p>
+
+      <p>And the sim-gate is cheap insurance. Everything Empiricist proposes runs against a model before it runs against anything expensive. I did not design this in from the Duke paper; I did it because I did not want to burn GPU hours on candidates a stabilizer simulator could reject in milliseconds. The Duke group did it because they did not want to burn a trap. Same mechanism, same reason.</p>
+
+      <h2>5. What I got wrong in March</h2>
+
+      <p>Certificates. I treated verification as an epistemic problem with a mechanical front end. It is closer to the reverse: an engineering problem of extending the certificate frontier, with an epistemic residue that shrinks as the frontier moves. The math results are the existence proof.</p>
+
+      <p>The ratchet. I described the harness as accumulating constraints monotonically. A harness that only tightens becomes a ceiling. The right rule is that every constraint should carry the failure that justified it, so that when the model stops making that mistake the constraint can be removed with a clear conscience. The Claude Code regression is what happens when harness changes are made without that record.</p>
+
+      <p>Prose. My knowledge mesh was described as nodes and edges, which sounds structural, but the examples I gave (protocols, papers, calibration histories) were mostly text. The Lin result says text is the part that does not transfer. The mesh should be callable.</p>
+
+      <p>And one thing I got right for the wrong reason. I said the split ontology, knowledge in one medium and physics in another, was the hard problem. It is, but not because bridging it is hard. Bridging it is a simulator plus an MCP server, as Duke showed. It is hard because the bridge has to be re-fitted continuously to a physical system that drifts, and nobody&rsquo;s harness does that yet.</p>
+
+      <h2>6. Open problems, updated</h2>
+
+      <p>Continuous re-fitting of the authorization simulator. The sim-gate is only as safe as the simulator is current. Nobody I have read is re-fitting the gate&rsquo;s world model against live device data as part of the loop. That is the first thing I would build next.</p>
+
+      <p>Certificate formats for domains without natural ones. Wet-lab biology does not have a Lean. What is the artifact a checker can validate for a claim about a cell line? The A-Lab GPSS case, where an unfalsifiable hypothesis kept steering experiments because the lab lacked the instrument to test it, is the failure mode: the certificate format was missing and the loop kept running anyway. A harness should know when a claim is uncertifiable in the current lab and refuse to spend bench time on it.</p>
+
+      <p>Automated judges. MLReplicate&rsquo;s r = 0.29 is the number to beat. Until inferential verifiers correlate with expert judgment, they are sensors that report noise, and a harness that trusts them is one that will accept the 59 percent.</p>
+
+      <p>Harness search for scientific loops. All of the automated harness-evolution results are on coding benchmarks with fast oracles. Nobody has run Meta-Harness or HarnessBank against a loop where the oracle is a 6-hour measurement. My expectation is that the search will need to be run mostly against simulated oracles and validated on the real one rarely, which is the same multi-fidelity problem one level up.</p>
+
+      <p>Decaying authority. Competence should expire. No system I know of does this.</p>
+
+      <p>The novelty-caution tuning. Still open. My position is that it is a downstream symptom of expensive refutation and should be attacked there.</p>
+
+      <h2>7. Where things stand</h2>
+
+      <p>In March I ended with a metaphor about postdocs. I will skip that this time.</p>
+
+      <p>The coding-agent world has a discipline. It has a taxonomy, tooling, automated search, and a growing record of what transfers. Scientific agents have a set of demonstrations, a set of benchmarks that show the demonstrations are not yet science, and a clear statement from a major lab that the constraint is validation. The harness work that matters for science is therefore verification work: pushing checks into the computational band, building certificate formats, gating physical actions on rehearsal, and making provenance a gate rather than a log.</p>
+
+      <p>None of that requires a better model. All of it is engineering that can be done now with the models we have, and the Duke rig and the A-Lab campaign are evidence that people are doing it.</p>
+
+      <div class="pullquote">
+        <p>The systems that get this right will not look impressive on a demo. They will look slow, because most of their turns will go to checking, and that is the correct allocation.</p>
+      </div>
+
+    </article>
+
+    <section class="sources" aria-labelledby="sources-heading">
+      <h2 id="sources-heading">references</h2>
+
+      <h3>Coding-agent harnesses</h3>
+      <ol>
+        <li id="ref1">Hashimoto, M. &ldquo;My AI Adoption Journey.&rdquo; mitchellh.com, 5 February 2026.</li>
+        <li id="ref2">Lopopolo, R. &ldquo;Harness engineering: leveraging Codex in an agent-first world.&rdquo; OpenAI, 11 February 2026.</li>
+        <li id="ref3">Anthropic. &ldquo;Effective harnesses for long-running agents.&rdquo; November 2025.</li>
+        <li id="ref4">Anthropic. &ldquo;Harness design for long-running application development.&rdquo; March 2026.</li>
+        <li id="ref5">Anthropic. &ldquo;Agent harness design: 3 patterns for harnessing Claude&rsquo;s intelligence.&rdquo; 2 April 2026.</li>
+        <li id="ref6">Anthropic. &ldquo;An update on recent Claude Code quality reports.&rdquo; April 2026.</li>
+        <li id="ref7">Böckeler, B. &ldquo;Harness engineering for coding agent users.&rdquo; martinfowler.com, 2 April 2026.</li>
+        <li id="ref8">Trivedy, V. &ldquo;The anatomy of an agent harness.&rdquo; LangChain, 10 March 2026.</li>
+        <li id="ref9">Lin, J. et al. &ldquo;Agentic harness engineering: observability-driven automatic evolution of coding-agent harnesses.&rdquo; arXiv:2604.25850, April 2026.</li>
+        <li id="ref10">Luo, X. et al. &ldquo;HarnessBank: semantic gene-bank search with gated verification for agent-harness self-evolution.&rdquo; arXiv:2607.13683, July 2026.</li>
+        <li id="ref11">Pan, L. et al. &ldquo;Natural-language agent harnesses.&rdquo; arXiv:2603.25723, March 2026.</li>
+        <li id="ref12">Ning, X. et al. &ldquo;Code as agent harness.&rdquo; arXiv:2605.18747, May 2026.</li>
+        <li id="ref13">&ldquo;The verification horizon: no silver bullet for coding agent rewards.&rdquo; arXiv:2606.26300, June 2026.</li>
+        <li id="ref14">Qu, J. and Lu, C. &ldquo;Bilevel autoresearch: meta-autoresearching itself.&rdquo; arXiv:2603.23420, March 2026.</li>
+      </ol>
+
+      <h3>Scientific agents</h3>
+      <ol start="15">
+        <li id="ref15">Karpathy, A. autoresearch. github.com/karpathy/autoresearch, 7 March 2026.</li>
+        <li id="ref16">Wang, C. et al. &ldquo;Sibyl-AutoResearch: autonomous research needs self-evolving trial-and-error harnesses, not paper generators.&rdquo; arXiv:2605.22343, May 2026.</li>
+        <li id="ref17">&ldquo;ResearchClawBench: a benchmark for end-to-end autonomous scientific research.&rdquo; arXiv:2606.07591, June 2026.</li>
+        <li id="ref18">&ldquo;MLReplicate: benchmarking autonomous research systems for machine learning reproducibility.&rdquo; arXiv:2605.16616, May 2026.</li>
+        <li id="ref19">&ldquo;Autonomous research agents: a survey of AI scientists and the verification gap.&rdquo; arXiv:2608.05179, August 2026.</li>
+        <li id="ref20">&ldquo;AutoResearchClaw: self-reinforcing autonomous research with human-AI collaboration.&rdquo; arXiv:2605.20025, May 2026.</li>
+        <li id="ref21">Wallace, D., Griffin, C., O&rsquo;Neill, S., Luong, T., and Larter, O. &ldquo;Conjecture machines: AI agents and the new validation bottleneck in science.&rdquo; Google DeepMind, July 2026.</li>
+        <li id="ref22">OpenAI. &ldquo;Model disproves discrete geometry conjecture.&rdquo; 20 May 2026.</li>
+      </ol>
+
+      <h3>Physical laboratories</h3>
+      <ol start="23">
+        <li id="ref23">&ldquo;A hardware-safety-gated system for LLM-written native ARTIQ control code on a trapped-ion platform.&rdquo; Duke University. arXiv:2606.27231, June 2026.</li>
+        <li id="ref24">Zhang, Z. et al. &ldquo;Safe-SDL: establishing safety boundaries and control mechanisms for AI-driven self-driving laboratories.&rdquo; arXiv:2602.15061, February 2026.</li>
+        <li id="ref25">&ldquo;Agentic LLM reasoning in a self-driving laboratory for air-sensitive lithium halide spinel conductors.&rdquo; arXiv:2604.11957, April 2026.</li>
+        <li id="ref26">&ldquo;Compressing the validation bottleneck: an agentic self-driving lab for scientific discovery.&rdquo; arXiv:2607.04508, July 2026.</li>
+        <li id="ref27">&ldquo;Grounded autonomous research: a fault-tolerant LLM pipeline from corpus to manuscript in frontier computational physics.&rdquo; arXiv:2607.02329, July 2026.</li>
+        <li id="ref28">Cao, S., Zhang, Z. et al. &ldquo;Agents for self-driving laboratories applied to quantum computing.&rdquo; <em>Patterns</em> 6, 101372, 2025.</li>
+      </ol>
+
+      <h3>Prior editions and related notes</h3>
+      <ol start="29">
+        <li id="ref29">&ldquo;Harness engineering for scientific agents.&rdquo; First edition, March 2026.</li>
+        <li id="ref30">&ldquo;What fits inside the loop.&rdquo; Preprint, 2026.</li>
+        <li id="ref31">&ldquo;The cost of deciding.&rdquo; Preprint, 2026.</li>
+      </ol>
+    </section>
+
+    <div class="bottom-strip">
+      <a class="back" href="/writing/">← back to writing</a>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    &copy; Sean Howell. Built with HTML &amp; CSS. Set in Berkeley Mono and IBM Plex Sans.
+  </footer>
+
+</body>
+</html>
