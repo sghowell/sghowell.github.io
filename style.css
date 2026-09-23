@@ -1146,3 +1146,506 @@ a { color: var(--fg); }
   .essay .article .fig-stack .band { margin-top: 10px; }
   .essay .article .fig-stack .band:first-child { margin-top: 0; }
 }
+
+/* ==========================================================================
+   More essay figures and prose elements (control plane, microfauna,
+   ML/quantum loop). Same conventions as above: monochrome, theme-aware,
+   responsive, zero JS.
+   ========================================================================== */
+
+.essay .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ----- Dated list (predictions) ----- */
+
+.essay .article .dated { margin: 0 0 1.4em; }
+
+.essay .article .dated > div {
+  display: grid;
+  grid-template-columns: 4.5em minmax(0, 1fr);
+  gap: 0 1em;
+  padding: 0.6em 0;
+  border-top: 1px solid var(--subtle);
+}
+
+.essay .article .dated > div:last-child { border-bottom: 1px solid var(--subtle); }
+
+.essay .article .dated dt {
+  padding-top: 0.25em;
+  font-family: var(--font);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.essay .article .dated dd { margin: 0; }
+
+/* ----- Operating stack (control plane) ----- */
+
+.essay .article .fig-ops {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) 58px;
+  column-gap: 14px;
+}
+
+.essay .article .fig-ops .ops-layer,
+.essay .article .fig-ops .ops-link,
+.essay .article .fig-ops .ops-boundary { grid-column: 2; }
+
+.essay .article .fig-ops .ops-layer {
+  padding: 9px 13px;
+  border: 1px solid var(--faint);
+  background: var(--subtle);
+}
+
+.essay .article .fig-ops .ops-layer b {
+  display: block;
+  font-family: var(--font);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.essay .article .fig-ops .ops-layer span {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-prose);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.essay .article .fig-ops .ops-layer.invert {
+  background: var(--fg);
+  border-color: var(--fg);
+}
+
+.essay .article .fig-ops .ops-layer.invert b,
+.essay .article .fig-ops .ops-layer.invert span { color: var(--bg); }
+
+.essay .article .fig-ops .ops-link {
+  padding: 5px 0;
+  text-align: center;
+  font-family: var(--font-prose);
+  font-size: 0.6875rem;
+  font-style: italic;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.essay .article .fig-ops .ops-link i {
+  margin-right: 5px;
+  font-family: var(--font);
+  font-style: normal;
+  color: var(--faint);
+}
+
+.essay .article .fig-ops .ops-boundary {
+  margin: 0 0 8px;
+  padding-top: 5px;
+  border-top: 1px dashed var(--fg);
+  text-align: center;
+  font-family: var(--font);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.essay .article .fig-ops .ops-boundary span {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-prose);
+  font-size: 0.6875rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--faint);
+}
+
+.essay .article .fig-ops .ops-band {
+  grid-column: 1;
+  align-self: center;
+  margin: 0;
+  text-align: right;
+  font-family: var(--font);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.essay .article .fig-ops .ops-band span {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-prose);
+  font-size: 0.6875rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.35;
+  text-transform: none;
+  color: var(--faint);
+}
+
+.essay .article .fig-ops .ops-band-adapt { grid-row: 3; }
+.essay .article .fig-ops .ops-band-fixed { grid-row: 6 / 9; }
+
+/* Telemetry rail: a bracket from the hardware back up to the AI layer. */
+.essay .article .fig-ops .ops-rail {
+  position: relative;
+  grid-column: 3;
+  grid-row: 3 / 11;
+  margin: 22px 0 22px -14px;
+  border: 1px solid var(--faint);
+  border-left: 0;
+}
+
+.essay .article .fig-ops .ops-rail::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-right: 7px solid var(--faint);
+}
+
+.essay .article .fig-ops .ops-rail span {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  font-family: var(--font);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ----- One layer vs. an ecology (microfauna) ----- */
+
+.essay .article .fig-eco {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 28px;
+}
+
+.essay .article .fig-eco .eco-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.essay .article .fig-eco .eco-head {
+  margin: 0 0 4px;
+  text-align: center;
+  font-family: var(--font);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.essay .article .fig-eco .eco-head span,
+.essay .article .fig-eco .eco-box span {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--font-prose);
+  font-size: 0.6875rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.35;
+  text-transform: none;
+  color: var(--faint);
+}
+
+.essay .article .fig-eco .eco-box span { color: var(--muted); }
+
+.essay .article .fig-eco .eco-box {
+  padding: 8px 12px;
+  border: 1px solid var(--faint);
+  background: var(--subtle);
+  text-align: center;
+  font-family: var(--font);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.essay .article .fig-eco .eco-box.grow {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.essay .article .fig-eco .eco-box.law {
+  background: none;
+  border-style: dashed;
+  border-color: var(--fg);
+}
+
+.essay .article .fig-eco .eco-box.invert {
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+}
+
+.essay .article .fig-eco .eco-residents {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+  padding: 2px 0;
+  list-style: none;
+}
+
+.essay .article .fig-eco .eco-residents li {
+  padding: 3px 8px;
+  border: 1px solid var(--faint);
+  font-family: var(--font);
+  font-size: 0.625rem;
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+  color: var(--fg);
+}
+
+/* ----- Permission table (microfauna) ----- */
+
+.essay .article .fig-table { overflow-x: auto; }
+
+.essay .article .fig-perm {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font);
+  font-size: 0.6875rem;
+}
+
+.essay .article .fig-perm th,
+.essay .article .fig-perm td {
+  padding: 9px 6px;
+  border-bottom: 1px solid var(--subtle);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.essay .article .fig-perm thead th {
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom-color: var(--faint);
+}
+
+.essay .article .fig-perm thead th:first-child { text-align: left; }
+
+.essay .article .fig-perm tbody th {
+  text-align: left;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--fg);
+}
+
+.essay .article .mark {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--fg);
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.essay .article .mark.yes { background: var(--fg); }
+.essay .article .mark.bounded { background: linear-gradient(90deg, var(--fg) 50%, transparent 50%); }
+.essay .article .mark.no { height: 0; border-width: 1px 0 0; border-color: var(--faint); border-radius: 0; }
+
+.essay .article .fig-key {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 22px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-prose);
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.essay .article .fig-key .mark { margin-right: 7px; }
+
+/* ----- The loop (ML/quantum) ----- */
+
+.essay .article .fig-loop {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+.essay .article .fig-loop .loop-node {
+  padding: 22px 10px;
+  border: 1px solid var(--faint);
+  background: var(--subtle);
+  text-align: center;
+  font-family: var(--font);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.essay .article .fig-loop .loop-node.invert {
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+}
+
+.essay .article .fig-loop .loop-legs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.essay .article .fig-loop .loop-leg { text-align: center; }
+
+.essay .article .fig-loop .loop-leg b {
+  display: block;
+  font-family: var(--font);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.essay .article .fig-loop .loop-leg span {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-prose);
+  font-size: 0.75rem;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.essay .article .fig-loop .leg-line {
+  position: relative;
+  height: 0;
+  margin: 8px 2px;
+  border-top: 1px solid var(--fg);
+}
+
+.essay .article .fig-loop .fwd .leg-line::after,
+.essay .article .fig-loop .back .leg-line::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  border-top: 4.5px solid transparent;
+  border-bottom: 4.5px solid transparent;
+}
+
+.essay .article .fig-loop .fwd .leg-line::after { right: -2px; border-left: 8px solid var(--fg); }
+.essay .article .fig-loop .back .leg-line::before { left: -2px; border-right: 8px solid var(--fg); }
+
+.essay .article .fig-loop .leg-glyph { display: none; }
+
+/* ----- Chart additions (log-log schematic) ----- */
+
+.essay .article .fig-svg .grid {
+  fill: none;
+  stroke: var(--subtle);
+  stroke-width: 1;
+}
+
+.essay .article .fig-svg .tick-label,
+.essay .article .fig-svg .line-label {
+  font-family: var(--font);
+  font-size: 12px;
+}
+
+.essay .article .fig-svg .tick-label { fill: var(--faint); }
+.essay .article .fig-svg .line-label { fill: var(--muted); }
+
+/* ----- These figures on narrow screens ----- */
+
+@media (max-width: 640px) {
+  .essay .article .dated > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+
+  .essay .article .fig-ops { grid-template-columns: minmax(0, 1fr) 40px; }
+
+  .essay .article .fig-ops .ops-layer,
+  .essay .article .fig-ops .ops-link,
+  .essay .article .fig-ops .ops-boundary { grid-column: 1; }
+
+  .essay .article .fig-ops .ops-rail { grid-column: 2; }
+
+  .essay .article .fig-ops .ops-band { display: none; }
+
+  .essay .article .fig-perm th,
+  .essay .article .fig-perm td { padding: 8px 3px; }
+
+  .essay .article .fig-perm thead th {
+    font-size: 0.5625rem;
+    letter-spacing: 0.04em;
+  }
+
+  .essay .article .fig-eco {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+  }
+
+  .essay .article .fig-loop {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .essay .article .fig-loop .loop-node { padding: 12px 10px; }
+
+  .essay .article .fig-loop .loop-legs {
+    flex-direction: row;
+    gap: 14px;
+  }
+
+  .essay .article .fig-loop .loop-leg { flex: 1 1 0; min-width: 0; }
+
+  .essay .article .fig-loop .leg-line { display: none; }
+
+  .essay .article .fig-loop .leg-glyph {
+    display: block;
+    margin-bottom: 4px;
+    font-family: var(--font);
+    font-style: normal;
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--fg);
+  }
+}

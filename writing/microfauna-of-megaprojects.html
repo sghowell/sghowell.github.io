@@ -25,51 +25,161 @@
 
     <article class="article">
 
-      <p>I increasingly think the control-plane metaphor is too neat for what is coming. It still imagines a clean hierarchy: machine below, intelligence above, human at the top. The next decade's serious systems will look stranger than that. A utility-scale quantum computer, an autonomous lab, an advanced chip fab, or a large robot fleet will be inhabited by something more like microfauna: dense populations of small, specialized machine intelligences living inside the project and feeding on its telemetry, schedules, faults, work orders, and simulations. Some will watch drift. Some will route jobs. Some will reconcile sensors. Some will triage repairs. Some will negotiate between throughput and risk. Most of them will be boring. All of them will matter.</p>
+      <p>In February I argued that the biggest machines of the next decade will need AI built into them as a <a href="/writing/ai-control-plane.html">control plane</a>. I still think that's right, but the picture was too tidy. A control plane implies a clean hierarchy, with the machine at the bottom, a layer of intelligence above it, and people at the top. The systems I have in mind will be messier than that. A utility-scale quantum computer, an autonomous lab, an advanced chip fab, or a large robot fleet will end up inhabited by something closer to microfauna: large populations of small, specialized machine intelligences living inside the project and feeding on its telemetry, schedules, fault logs, work orders, and simulations.</p>
 
-      <p>My own work on scientific agents is part of why I have grown impatient with the word <em>copilot</em>. A copilot sits beside a human and waits to be asked. These systems need resident operators woven into the substrate. Quantum already tells the story. IBM's current fault-tolerant plan is explicitly modular and adaptive, with real-time decoded measurements that can change subsequent instructions, a compact decoder architecture aimed at FPGA or ASIC implementation, and a 2029 target of 200 logical qubits running 100 million gates.<sup class="note"><a href="#ref1">1</a></sup> Google reports the same basic truth from another direction: on Willow, error correction now works well enough that decoder latency itself becomes a first-order systems problem, with 50–100 microseconds of delay already material to performance.<sup class="note"><a href="#ref2">2</a></sup> PsiQuantum, meanwhile, is now talking in the language of tier-1 foundries, thousands of wafers, cryogenic cabinets supporting hundreds of chips, and million-qubit machines.<sup class="note"><a href="#ref3">3</a></sup> These have become operational ecologies.</p>
+      <p>Each one does a narrow job, usually a dull one, and the machine depends on all of them: watching one subsystem for drift, routing work, reconciling two sensors that disagree, sorting incoming faults, or trading off throughput against risk.</p>
+
+      <p>My own work on scientific agents is part of why I've grown impatient with the word <em>copilot</em>, which suggests something that sits next to a person and waits to be asked. These machines need operators that live inside the system and run all the time, and quantum computing is already heading that way. IBM's fault-tolerance plan is modular and adaptive. Decoded measurements come back in real time and can change the instructions that follow, the decoder is designed to be compact enough for an FPGA or ASIC, and the target for 2029 is 200 logical qubits running 100 million gates.<sup class="note"><a href="#ref1">1</a></sup> On Willow, Google's error correction works well enough that decoder latency has become a first-order systems problem, with delays of 50 to 100 microseconds already affecting performance.<sup class="note"><a href="#ref2">2</a></sup> PsiQuantum now talks in the vocabulary of manufacturing: tier-1 foundries, thousands of wafers, cryogenic cabinets designed to support hundreds of chips, and machines with a million qubits.<sup class="note"><a href="#ref3">3</a></sup></p>
 
       <h2>The small agents arrive first</h2>
 
-      <p>The same pattern is now showing up in other domains with surprisingly little disguise. Applied Materials describes chipmaking as a continuous chain from atomic-scale materials simulation to fab-scale digital twins, with millions of measurements, thousands of process variables, and virtual studies that now collapse weeks into same-day work.<sup class="note"><a href="#ref4">4</a></sup> The U.S. Commerce Department has backed a semiconductor digital-twin institute with explicit goals to cut development and manufacturing costs by more than 40 percent and cycle times by 35 percent.<sup class="note"><a href="#ref5">5</a></sup> BMW is scaling digital twins across more than 30 production sites, expects up to 30 percent lower planning costs, and says the system is being expanded with generative and agentic AI assistants.<sup class="note"><a href="#ref6">6</a></sup> Amazon has deployed its millionth robot and says its DeepFleet model should improve travel efficiency across the fleet by 10 percent.<sup class="note"><a href="#ref7">7</a></sup> NVIDIA is now publishing blueprints for robot-fleet twins and AI-factory operations that explicitly connect power, cooling, networking, and operations agents.<sup class="note"><a href="#ref8">8</a></sup> Siemens, working with NVIDIA, is talking openly about an industrial AI operating system and fully AI-driven adaptive manufacturing blueprints starting in 2026, while PepsiCo is already using its new twin stack to catch potential facility issues before physical changes are made.<sup class="note"><a href="#ref9">9</a></sup></p>
+      <p>The same thing is happening outside quantum computing. Applied Materials describes chipmaking as a continuous chain of models, from atomic-scale materials simulation up to digital twins of the whole fab, running on millions of measurements and thousands of process variables, and says virtual studies that used to take weeks now come back the same day.<sup class="note"><a href="#ref4">4</a></sup> The Commerce Department has funded a digital-twin institute for semiconductors whose stated goals are cutting development and manufacturing costs by more than 40 percent and cycle times by 35 percent.<sup class="note"><a href="#ref5">5</a></sup> BMW is rolling digital twins out across more than 30 production sites, expects planning costs to drop by up to 30 percent, and says it's adding generative and agentic AI assistants to the system.<sup class="note"><a href="#ref6">6</a></sup> Amazon has deployed its millionth robot, along with a foundation model called DeepFleet that it says should make the fleet's travel 10 percent more efficient.<sup class="note"><a href="#ref7">7</a></sup></p>
 
-      <p>In science, the boundary is dissolving just as fast. <em>Nature</em> papers now describe autonomous mobile robots for exploratory chemistry, LLM-driven systems that can design, plan, and execute experiments through tool use, and growing interest in self-driving labs as shared network infrastructure rather than one-off curiosities.<sup class="note"><a href="#ref10">10</a></sup><sup class="note"><a href="#ref11">11</a></sup> The practical point is that autonomy will arrive as graded resident capability, spreading through subsystems one role at a time. The important architectural fact is that these roles are local, narrow, and continuous. A quantum computer needs agents that watch syndrome statistics, prioritize recalibration, detect creeping thermal or RF pathologies, choose when to reroute workloads, and translate application demand into live resource commitments. A fab needs agents that sit between chamber physics, metrology, recipes, and throughput. A robot fleet needs traffic organisms, map maintainers, collision forecasters, charge schedulers, and exception triage. A self-driving lab needs experiment proposers, instrument translators, literature scavengers, and safety clerks. These systems want many smaller models with limited authority, shared state, and hard boundaries, each handling the decisions inside its own scope.</p>
+      <p>NVIDIA publishes blueprints for digital twins of robot fleets and of AI factories, with agents for power, cooling, networking, and operations wired together.<sup class="note"><a href="#ref8">8</a></sup> Siemens and NVIDIA describe an industrial AI operating system and blueprints for fully AI-driven adaptive manufacturing starting in 2026, and PepsiCo is already using its new twins to catch potential facility problems before any physical changes are made.<sup class="note"><a href="#ref9">9</a></sup></p>
+
+      <p>In science, recent <em>Nature</em> papers describe mobile robots doing exploratory chemistry and LLM-based systems that design, plan, and run experiments through tool use, and there's growing interest in treating self-driving labs as shared network infrastructure.<sup class="note"><a href="#ref10">10</a></sup><sup class="note"><a href="#ref11">11</a></sup></p>
+
+      <p>I expect autonomy to arrive in all of these the same way, one role at a time. The roles are local and narrow, and they don't end; nobody finishes watching for drift. Take a fault-tolerant quantum computer. It needs agents that watch syndrome statistics, decide which qubits to recalibrate first, catch creeping thermal or RF problems, choose when to move work off a module, and turn application demand into actual resource commitments. A self-driving lab wants an experiment proposer, an instrument translator, a literature scavenger, and a safety clerk.</p>
+
+      <figure class="fig">
+        <p class="fig-kicker">One layer, or an ecology</p>
+        <div class="fig-eco" role="img" aria-label="Two panels. First, the control-plane picture: people above one AI layer, a layer of fixed policy and control, and the machine. Second, the same machine with people above a constitution of permissions and invariants, a row of small resident agents, a shared event model and digital twin, and the machine at the bottom.">
+          <div class="eco-panel">
+            <p class="eco-head">Control plane<span>one adaptive layer</span></p>
+            <div class="eco-box">People</div>
+            <div class="eco-box grow">AI layer<span>one planner for the whole machine</span></div>
+            <div class="eco-box">Policy and control<span>fixed rules, deterministic loops</span></div>
+            <div class="eco-box invert">Machine</div>
+          </div>
+          <div class="eco-panel">
+            <p class="eco-head">Resident ecology<span>many narrow agents under shared rules</span></p>
+            <div class="eco-box">People<span>objectives, risk, sign-off</span></div>
+            <div class="eco-box law">Constitution<span>permissions, invariants, rollback</span></div>
+            <ul class="eco-residents">
+              <li>syndrome watcher</li>
+              <li>recalibration scheduler</li>
+              <li>thermal/RF monitor</li>
+              <li>workload router</li>
+              <li>demand translator</li>
+              <li>maintenance triage</li>
+            </ul>
+            <div class="eco-box">Shared state<span>event log, digital twin</span></div>
+            <div class="eco-box invert">Machine</div>
+          </div>
+        </div>
+        <p class="fig-note">The residents coordinate mostly through the shared state and the rules.</p>
+        <figcaption><b>Figure 1.</b> The control-plane picture from February, and the same machine inhabited by narrow residents. Each resident has a small job and limited authority, and all of them read and write one shared event model and answer to an explicit constitution. The resident names are examples from a quantum computer.</figcaption>
+      </figure>
+
+      <h2>The project as an ecosystem</h2>
+
+      <p>The agents that matter most will mostly look like janitors, dispatchers, inspectors, bookkeepers, and mechanics. One notices that a particular syndrome pattern in a quantum module is the early smell of a calibration slip. A second holds a process step because a metrology tool has started to drift. When someone moves a rack, a third reroutes the robot traffic. A fourth turns down an experiment plan because the solvent cabinet, the glovebox schedule, and the waste stream are all close to their limits.</p>
+
+      <p>The hard problem is keeping local order in a system that never stops moving, so I expect the winning pattern to be a society of narrow models with limited authority, shared state, and explicit law. Central planners are useful, but the combinations pile up faster than any single loop can absorb them. I find it helps to think of a megaproject as a habitat, with an immune system, a circulatory system, and a bookkeeping layer. An ecology like that can do a lot if the data model is clean and the rules are tight, and it goes feral quickly if they aren't.</p>
+
+      <p>It changes the shape of the organization, too. Project management stops being mostly meetings and starts to look like a live inference problem, with the schedule serving as the current best estimate of what the plant can actually do this week. Change control moves out of PDF procedures and into rules a machine can read. And the permission graph, the record of who or what is allowed to sense, decide, and act, starts to matter more than the org chart.</p>
 
       <div class="pullquote">
-        <p>Megaprojects grow into autonomy the way living systems do, by cultivating a biosphere around themselves.</p>
+        <p>The hard problem is keeping local order in a system that never stops moving.</p>
       </div>
 
-      <h2>The project becomes a managed ecosystem</h2>
+      <p>My aggressive bet is that by the early 2030s, the decisive moat in many of these systems will sit less in the headline hardware than in the ecology living around it. Two teams can have comparable robot cells, process tools, or qubits, even the same foundation models, and look about the same from outside. If one has years of replayable telemetry, shadow agents, simulator traces, policy history, and incident memory, its system will keep improving, while the other team's, running on dashboards, tickets, heroics, and tribal knowledge, will only be as good as whoever's on call.</p>
 
-      <p>This is the part I think people still underweight. The important agents will mostly look like janitors, dispatchers, inspectors, bookkeepers, and mechanics. One will notice that a particular syndrome pattern in a quantum module is the early smell of a calibration slip. Another will delay a process step because a metrology instrument is starting to drift. Another will rewrite robot traffic after a small layout change. Another will refuse an experiment plan because the solvent cabinet, glovebox schedule, and waste stream are already near constraint. The hard problem is maintaining local order in a system that never stops moving.</p>
+      <h2>Predictions</h2>
 
-      <p>That is why I expect the winning pattern to be a society of narrower models with limited authority, shared state, and explicit law. Central planners are useful, but the combinatorics arrive faster than any single loop can absorb them. Think of a megaproject as a habitat with an immune system, a circulatory system, and a bookkeeping layer. If the data model is clean and the rules are tight, this ecology becomes extraordinarily powerful. If the data model is dirty and the rules are fuzzy, it goes feral fast.</p>
+      <p>Some dated predictions, so I can be checked:</p>
 
-      <p>This also changes the shape of the firm. Project management stops being mostly a matter of meetings and starts becoming a live inference system. Schedules become live beliefs about what the plant can really do this week. Change control moves from PDF procedure to machine-readable law. The org chart matters less than the permission graph: who, or what, is allowed to sense, decide, and act.</p>
-
-      <p>My aggressive bet is that by the early 2030s the decisive moat in many of these systems will sit less in the headline hardware than in the resident ecology around it. Two teams may have comparable robot cells, comparable process tools, comparable qubits, even comparable foundation models. One will have years of replayable telemetry, shadow agents, simulator traces, policy history, and incident memory. The other will have dashboards, tickets, heroics, and tribal knowledge. From the outside they will look similar. Inside, one will compound and the other will stall.</p>
-
-      <h2>Predictions, sooner than people think</h2>
-
-      <p>By 2027, every credible fault-tolerant quantum effort will have agentic operations in shadow mode across calibration prioritization, decoder tuning, workload admission, and failure diagnosis. By 2028, at least one major fab, robot-heavy factory, or autonomous-lab network will treat the live digital twin as a commissioning requirement rather than a planning aid. By 2029, large industrial systems will begin to budget inference, simulation, and policy infrastructure the way they already budget power, cooling, and cleanroom utilities. That same year, I would expect the first utility-scale quantum programs to discover that the real bottleneck is the coordination burden of keeping the whole stack inside its useful envelope.</p>
-
-      <p>By 2030, the phrase <em>operator headcount</em> will need an asterisk. The median consequential decision inside a frontier lab, fab, or robot fleet will already have been made, filtered, or scheduled by machine intelligence before a human ever sees it. Humans will still set objectives, own risk, sign off on escalations, and intervene in novel situations. But they will sit above the runtime as the constitutional layer.</p>
-
-      <p>By 2032, procurement, finance, and regulation will start to absorb this. Black-box equipment that cannot emit structured state, accept policy-mediated commands, or participate in replayable digital twins will begin to look obsolete. Insurers and auditors will want incident lineage, action traces, uncertainty thresholds, and rollback proofs. In other words, the microfauna will become part of the official operating model.</p>
+      <dl class="dated">
+        <div>
+          <dt>2027</dt>
+          <dd>Every credible fault-tolerant quantum effort runs agents in shadow mode for calibration prioritization, decoder tuning, workload admission, and failure diagnosis.</dd>
+        </div>
+        <div>
+          <dt>2028</dt>
+          <dd>At least one major fab, robot-heavy factory, or network of autonomous labs requires a live digital twin before it will commission a system.</dd>
+        </div>
+        <div>
+          <dt>2029</dt>
+          <dd>Large industrial systems start budgeting for inference, simulation, and policy infrastructure the way they budget for power, cooling, and cleanroom utilities. I'd also expect the first utility-scale quantum programs to find that their bottleneck is coordination: keeping the whole stack inside its useful envelope.</dd>
+        </div>
+        <div>
+          <dt>2030</dt>
+          <dd>"Operator headcount" needs an asterisk. Most consequential decisions inside a frontier lab, fab, or robot fleet have already been made, filtered, or scheduled by machine intelligence before a person sees them. People still set objectives, own the risk, sign off on escalations, and step in when something new happens, but they sit above the runtime, as its constitutional layer.</dd>
+        </div>
+        <div>
+          <dt>2032</dt>
+          <dd>Procurement, finance, and regulation catch up. Equipment that can't report structured state, accept commands through a policy layer, or take part in a replayable twin starts to look obsolete, and insurers and auditors ask for incident lineage, action traces, uncertainty thresholds, and proof that rollback works. By then the microfauna are part of the official operating model.</dd>
+        </div>
+      </dl>
 
       <h2>What to do now</h2>
 
-      <p>The immediate work is much less glamorous than the vision. First, instrument the system as if it is going to host machine operators. High-frequency telemetry, calibration histories, maintenance records, operator notes, work orders, simulator outputs, and control actions need to land in a shared event model with stable identifiers and real timestamps. You cannot grow useful microfauna in a swamp of screenshots, spreadsheets, and PDF procedures.</p>
+      <p>Start with the data, and instrument the system on the assumption that it will host machine operators. High-rate telemetry, calibration histories, maintenance records, operator notes, work orders, simulator output, and control actions should all land in a shared event model, with stable identifiers and real timestamps. You can't grow useful microfauna in a swamp of screenshots, spreadsheets, and PDF procedures.</p>
 
-      <p>Second, stop treating digital twins as presentationware. Build them for replay, counterfactuals, and shadow operation. Every meaningful intervention should be testable against a twin or at least a surrogate before it touches live hardware. Every incident should become training material. Every near miss should be reproducible enough that an agent can learn from it without rerunning the failure in the plant.</p>
+      <p>Stop treating digital twins as presentationware. Build them for replay, counterfactuals, and running agents in shadow. Every meaningful intervention should be testable against a twin, or at least a surrogate model, before it touches live hardware. Incidents should become training material, and near misses should be reproducible enough that an agent can learn from them without anyone rerunning the failure in the plant.</p>
 
-      <p>Third, write a machine constitution before you write a machine personality. Most of the engineering here is permissions, not prompt craft: what an agent may observe, propose, execute, defer, cancel, or escalate; what uncertainty bars apply; what hard invariants may never be crossed; what rollback path exists if the model is wrong; which human signatures are required when the stakes change. A megaproject without this will still grow microfauna. It will just grow them accidentally.</p>
+      <p>Write a machine constitution first. Most of the engineering here is permissions, and very little of it is prompt craft: what each agent may observe, propose, execute, defer, cancel, or escalate; how certain it has to be before acting; which invariants it may never cross; how its actions get rolled back when the model is wrong; and when a person has to sign. If a megaproject skips this step, its microfauna will grow by accident.</p>
 
-      <p>Fourth, seed the ecology with narrow residents. Give one agent ownership of calibration prioritization. Give another maintenance triage. Give a third responsibility for routing robot traffic, ranking experiments, or reconciling metrology against throughput. Run them in shadow mode. Compare them against human baselines. Keep their action surfaces small until they earn more. The goal is to discover which organisms are actually useful and under what constraints.</p>
+      <figure class="fig">
+        <p class="fig-kicker">A starting constitution</p>
+        <div class="fig-table">
+          <table class="fig-perm">
+            <caption class="sr-only">Illustrative permissions for four resident agents early in a program</caption>
+            <thead>
+              <tr>
+                <th scope="col">Resident</th>
+                <th scope="col">Observe</th>
+                <th scope="col">Propose</th>
+                <th scope="col">Execute</th>
+                <th scope="col">Escalate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Syndrome watcher</th>
+                <td><i class="mark yes" aria-hidden="true"></i><span class="sr-only">allowed</span></td>
+                <td><i class="mark yes" aria-hidden="true"></i><span class="sr-only">allowed</span></td>
+                <td><i class="mark no" aria-hidden="true"></i><span class="sr-only">not allowed</span></td>
+                <td><i class="mark yes" aria-hidden="true"></i><span class="sr-only">allowed</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Recalibration scheduler</th>
+                <td><i class="mark yes" aria-hidden="true"></i><span class="sr-only">allowed</span></td>
+                <td><i class="mark yes" aria-hidden="true"></i><span class="sr-only">allowed</span></td>
+                <td><i class="mark bounded" aria-hidden="true"></i><span class="sr-only">allowed within bounds</span></td>
+                <td><i class="mark yes" aria-hidden="true"></i><span class="sr-only">allowed</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Workload router</th>
+                <td><i class="mark yes" aria-hidden="true"></i><span class="sr-only">allowed</span></td>
+                <td><i class="mark yes" aria-hidden="true"></i><span class="sr-only">allowed</span></td>
+                <td><i class="mark" aria-hidden="true"></i><span class="sr-only">shadow only</span></td>
+                <td><i class="mark yes" aria-hidden="true"></i><span class="sr-only">allowed</span></td>
+              </tr>
+              <tr>
+                <th scope="row">Maintenance triage</th>
+                <td><i class="mark yes" aria-hidden="true"></i><span class="sr-only">allowed</span></td>
+                <td><i class="mark yes" aria-hidden="true"></i><span class="sr-only">allowed</span></td>
+                <td><i class="mark no" aria-hidden="true"></i><span class="sr-only">not allowed</span></td>
+                <td><i class="mark yes" aria-hidden="true"></i><span class="sr-only">allowed</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="fig-key" aria-hidden="true">
+          <li><i class="mark yes"></i>allowed</li>
+          <li><i class="mark bounded"></i>within bounds</li>
+          <li><i class="mark"></i>shadow only</li>
+          <li><i class="mark no"></i>not allowed</li>
+        </ul>
+        <figcaption><b>Figure 2.</b> An illustrative permission table for four residents of a quantum computer, early in a program. Every resident can observe, propose, and escalate. The right to execute is granted one resident at a time, within bounds, after a shadow period against the people doing the job now. A real constitution would also cover deferring and cancelling, uncertainty thresholds, rollback, and who has to sign.</figcaption>
+      </figure>
 
-      <p>Finally, staff this like core infrastructure. The right team is a joint operating group of controls people, software people, domain scientists, reliability engineers, and whoever carries operational accountability. If the system is strategic, the ecology around it is strategic.</p>
+      <p>Then seed the ecology with a few narrow residents. Give one agent calibration prioritization and another maintenance triage, and give a third robot traffic, or experiment ranking, or reconciling metrology against throughput. Run them in shadow mode, compare them against the people doing those jobs now, and keep what they're allowed to touch small until they've earned more. At this stage you're trying to find out which organisms are useful, and under what constraints.</p>
 
-      <p>I think the next decade ends with something stranger and more practical than one majestic industrial mind quietly running everything: megaprojects dense with constrained machine operators, each unremarkable on its own, together forming the metabolism of the system. Such microfauna already exist in early forms. The open question is whether we cultivate their habitat deliberately enough to keep the project coherent or allow them to grow feral.</p>
+      <p>Finally, staff it like core infrastructure. The right team is a joint operating group of controls engineers, software engineers, domain scientists, reliability engineers, and whoever is accountable when the machine goes down.</p>
+
+      <p>By the end of the decade I expect megaprojects to be full of constrained machine operators, each doing a small share of the metabolic work that keeps the system alive. Early versions already exist. Whether they keep a project coherent or grow feral will depend mostly on whether anyone cultivates their habitat on purpose.</p>
 
     </article>
 

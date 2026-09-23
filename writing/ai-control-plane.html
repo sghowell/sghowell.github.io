@@ -25,45 +25,85 @@
 
     <article class="article">
 
-      <p>I have spent enough time around quantum hardware, control stacks, and AI-driven scientific workflows to think the answer is settled: the most important machines we build in the next decade will not be operable at scale without advanced AI. A utility-scale quantum computer is a heterogeneous system of chips, control electronics, cryogenics, networking, compilers, decoders, schedulers, data systems, and operators tied together by feedback loops. An autonomous laboratory has the same shape. So does a modern chip fab. So does any serious multi-robot installation. Once you cross a certain threshold of scale and coupling, humans move up to a supervisory role above the runtime.</p>
+      <p>Keeping a quantum computer running still takes a lot of people. Calibration scripts handle the routine drift, but someone has to decide when routine isn't enough, which experiments get the machine this afternoon, and whether last night's jump in error rates came from the fridge, the control electronics, or a software change. That's workable for a machine in a lab. It won't work for a utility-scale quantum computer, and quantum computers aren't the only machines headed for this problem.</p>
 
-      <h2>Quantity has a quality of its own</h2>
+      <p>Autonomous labs, advanced chip fabs, and large robot installations are built the same way, as heterogeneous piles of subsystems tied together by feedback loops. In a quantum computer the pile includes chips, control electronics, cryogenics, networking, compilers, decoders, schedulers, and the people running all of it. Past a certain size and degree of coupling, people can't be the ones closing those loops anymore. They move up a level, to setting goals and approving policy, and something else has to do the operating. I think that something will be advanced AI, built into the machine as part of its control plane, and after enough years around quantum hardware, control stacks, and AI-driven scientific workflows, I don't see a realistic alternative.</p>
 
-      <p>At scale, the problem changes category. IBM's roadmap now talks openly about modular systems, multiple quantum processors linked in a data-center environment, real-time decoding, and a path to 200 logical qubits running 100 million gates by 2029.<sup class="note"><a href="#ref1">1</a></sup> Google's recent Willow results make the same point from another direction: useful applications are expected to need billions if not trillions of reliable operations, and the latest error-correction results already depend on classical software built around machine learning, reinforcement learning, graph-based decoding, and real-time measurement processing.<sup class="note"><a href="#ref2">2</a></sup> Photonic roadmaps push the infrastructure logic further still: foundry-scale wafer production, cryogenic cabinets supporting hundreds of chips, and dedicated characterization and calibration facilities treated as part of the machine rather than as support functions.<sup class="note"><a href="#ref3">3</a></sup></p>
+      <h2>What changes with scale</h2>
 
-      <p>That is the real shift. The bottleneck has become whether the whole system can keep itself inside a viable operating envelope while objectives, workloads, and physical conditions change. Component-level fidelity and throughput targets are increasingly within reach; holding them together under drift is the hard part. At utility scale you are managing drift, correlated failures, latency budgets, maintenance windows, admission control, and scheduling across layers that were once treated as separate disciplines. This is a cross-stack control problem.</p>
+      <p>The public roadmaps already describe machines like this. IBM's plan for fault tolerance is modular, with multiple quantum processors linked in a data center and decoding done in real time, on the way to 200 logical qubits running 100 million gates by 2029.<sup class="note"><a href="#ref1">1</a></sup> Google's Willow results get at the same thing from the error-correction side: useful applications will need billions of reliable operations, possibly trillions, and the latest error-correction results already depend on classical software built around machine learning, reinforcement learning, graph-based decoding, and real-time processing of measurements.<sup class="note"><a href="#ref2">2</a></sup> Photonic roadmaps push the infrastructure further still, with foundry-scale wafer production, cryogenic cabinets designed to support hundreds of chips, and dedicated facilities for characterization and calibration.<sup class="note"><a href="#ref3">3</a></sup> At that scale I'd count those facilities as part of the machine.</p>
+
+      <p>In all three plans, hitting a fidelity or throughput target on a single component is increasingly within reach. The harder job is keeping the whole machine inside a workable operating envelope as the hardware drifts, workloads change, and parts fail in correlated ways. That control problem cuts across layers of the stack that used to belong to separate disciplines.</p>
+
+      <p>I run into this constantly in my own work. Architecture, photonic design, calibration, error correction, compilation, and day-to-day operations keep collapsing into one optimization problem, because the machine doesn't respect the boundaries we draw between teams. A change to the device design changes how much calibration it needs. If the decoder gets slower, the depth of circuit you can usefully run goes down. A new scheduling policy reshapes the error budget. Tools built separately for each layer can't see those trade-offs.</p>
 
       <div class="pullquote">
-        <p>At utility scale, the hard part is building a machine that keeps working while everything around it moves.</p>
+        <p>Past a certain size and degree of coupling, people can't be the ones closing those loops anymore.</p>
       </div>
-
-      <p>In my own work, I keep coming back to the same pattern: architecture search, photonic design, calibration, error correction, compilers, experimental workflows, and system operations are converging into one continuous optimization problem. We draw boundaries for organizational convenience, but the machine does not respect them. A change in device design changes calibration burden. A change in decoder latency changes useful algorithm depth. A change in scheduling policy changes the shape of the error budget. Once you see the system whole, it becomes hard to imagine scaling it with disconnected tools.</p>
 
       <h2>Where fixed automation runs out</h2>
 
-      <p>We already know how to automate narrow loops. FPGAs, control firmware, recipe engines, advanced process control, and carefully tuned heuristics remain essential, and low-level control should stay as deterministic, testable, and boring as we can make it. The problem is that fixed automation does not scale cleanly into environments that are high-dimensional, partially observed, nonstationary, and safety-constrained. Hand-built rules work until they collide with a regime change, a new operating point, or an interaction that no one explicitly encoded.</p>
+      <p>We already automate the narrow loops, and we do it well. FPGAs, control firmware, recipe engines, advanced process control, and a lot of carefully tuned heuristics are what keep these machines alive today, and the lowest levels of control should stay as deterministic, testable, and boring as we can make them. The trouble is higher up. Fixed automation copes badly with systems that are high-dimensional, partially observed, changing over time, and safety-constrained, which describes every machine on my list. Hand-written rules hold until the machine reaches an operating point nobody wrote a rule for, or two subsystems interact in a way nobody thought to encode.</p>
 
-      <p>Advanced AI matters because it can sit above and across those loops. It can fuse multimodal telemetry, learn surrogate models where first-principles simulation is too slow, infer latent state from messy data, rank interventions by expected value, and plan under uncertainty. In a quantum system, that means deciding what to recalibrate and when, rerouting workloads around drifting subsystems, trading decoder latency against logical fidelity, and translating application intent into live resource allocation. In a fab, it means detecting excursions earlier and navigating thousands of interdependent process variables. In a large robotic system, it means coordinating perception, planning, task allocation, and failure recovery without drowning operators in exception handling.</p>
+      <p>An AI layer can work above and across those loops. It can read many kinds of telemetry at once, learn surrogate models where first-principles simulation is too slow to run online, infer hidden state from messy measurements, rank possible interventions by expected value, and plan under uncertainty. In a quantum computer that means deciding what to recalibrate and when, routing work around a subsystem that's starting to drift, trading decoder latency against logical fidelity, and turning what applications ask for into live resource allocations. A fab needs the same kind of judgment to catch process excursions earlier across thousands of interacting variables, and a robot fleet needs it to coordinate planning and task allocation and to recover from failures without burying its operators in exceptions.</p>
 
-      <h2>The pattern</h2>
+      <h2>Early versions</h2>
 
-      <p>None of this is speculative. Berkeley Lab's A-Lab was built as a closed-loop materials discovery system and reports throughput on the order of 50 to 100 times a human operator, with 24/7 operation and 100–200 samples per day.<sup class="note"><a href="#ref4">4</a></sup> The corresponding <em>Nature</em> paper reported 41 novel compounds realized from 58 targets in 17 days of continuous operation.<sup class="note"><a href="#ref5">5</a></sup> In semiconductor manufacturing, Applied Materials publicly describes platforms that take millions of measurements across wafers and individual chips while optimizing thousands of process variables in real time, spanning research, ramp, and high-volume manufacturing.<sup class="note"><a href="#ref6">6</a></sup></p>
+      <p>Berkeley Lab built its A-Lab as a closed-loop system for discovering materials. The lab says it runs around the clock, handles 100 to 200 samples a day, and gets through on the order of 50 to 100 times as much work as a person could.<sup class="note"><a href="#ref4">4</a></sup> The <em>Nature</em> paper describing it reported 41 new compounds made from 58 targets in 17 days of continuous operation.<sup class="note"><a href="#ref5">5</a></sup> In chip manufacturing, Applied Materials describes platforms that take millions of measurements across wafers and individual chips and tune thousands of process variables in real time, from research through high-volume production.<sup class="note"><a href="#ref6">6</a></sup></p>
 
-      <p>These are early forms of the same architecture: a machine whose performance depends as much on orchestration, inference, and adaptive decision-making as on the raw capability of any single instrument. Once that architecture appears, the separation between "the machine" and "the software that helps run it" starts to break down. The software is part of the system's achievable operating regime.</p>
+      <p>In both cases, how well the system performs depends as much on the orchestration and inference wrapped around the instruments as on the instruments themselves. The software decides which operating regimes the machine can reach, so I count it as part of the machine.</p>
 
-      <h2>What "advanced AI" actually means here</h2>
+      <h2>What the AI layer looks like</h2>
 
-      <p>When I say advanced AI, I mean models that understand time series, logs, images, layouts, text, and simulator output together; agents that can propose and evaluate actions; and policy layers that enforce hard constraints before anything touches hardware. The architecture I have in mind is conservative where it must be and adaptive where it can be. Hard real-time control stays classical. Safety interlocks stay explicit. AI handles orchestration, diagnosis, forecasting, design-space search, and cross-layer optimization.</p>
+      <p>When I say advanced AI, I mean models that can read time series, logs, images, layouts, text, and simulator output together; agents that can propose actions and evaluate them; and a policy engine that checks hard constraints before anything reaches the hardware. In the design I have in mind, hard real-time control stays classical and safety interlocks stay explicit. The AI takes the slower work above them: orchestration, diagnosis, forecasting, searching design spaces, and making trade-offs between layers.</p>
 
-      <p>The same AI stack that will operate these systems is already useful in designing them. Architecture discovery, photonic inverse design, decoder search, compiler co-optimization, experiment planning, and resource estimation are all versions of the same problem: exploring very large design spaces under hard physical constraints. The boundary between design-time AI and runtime AI is going to blur.</p>
+      <p>Some of that classical control can be learned. A lot of my work has been on neural decoders, which are trained networks, but by the time one runs on an FPGA or an ASIC its weights are frozen and it runs deterministically, like any other firmware. What stays out of the fast path is anything that learns or plans while the machine is running.</p>
 
-      <p>Of course, this only works if the AI layer is engineered like critical infrastructure rather than consumer software. That means data provenance, audit trails, simulator-in-the-loop evaluation, rollback, calibrated uncertainty, action whitelists, structured escalation, and continuous benchmarking against baselines. Humans still set goals, define invariants, approve policy, and own accountability. But asking humans to be the real-time operating system for million-component scientific infrastructure is pure nostalgia.</p>
+      <figure class="fig">
+        <p class="fig-kicker">Where the AI layer sits</p>
+        <div class="fig-ops" role="img" aria-label="A five-layer stack. People set goals for an AI layer. The AI layer sends proposed actions across a dashed policy boundary to a policy engine, which passes approved actions to classical control, which drives the hardware. Telemetry runs from the hardware straight back up to the AI layer.">
+          <div class="ops-layer">
+            <b>People</b>
+            <span>set goals and invariants, approve the policy, answer for the results</span>
+          </div>
+          <div class="ops-link"><i>↓</i>goals</div>
+          <div class="ops-layer">
+            <b>AI layer</b>
+            <span>orchestration, diagnosis, forecasting, design search, trade-offs between layers</span>
+          </div>
+          <div class="ops-link"><i>↓</i>proposed actions</div>
+          <div class="ops-boundary">policy boundary<span>adaptive above, fixed below</span></div>
+          <div class="ops-layer">
+            <b>Policy engine</b>
+            <span>checks every action against hard limits and sends anything it can't approve to a person</span>
+          </div>
+          <div class="ops-link"><i>↓</i>approved actions</div>
+          <div class="ops-layer">
+            <b>Classical control</b>
+            <span>FPGAs, firmware, frozen decoders, recipes; hard real time</span>
+          </div>
+          <div class="ops-link"><i>↓</i>pulses, setpoints</div>
+          <div class="ops-layer invert">
+            <b>Hardware</b>
+            <span>qubits, cryogenics, lasers, electronics, tools, robots</span>
+          </div>
+          <p class="ops-band ops-band-adapt">Adaptive<span>learns and plans, can be wrong</span></p>
+          <p class="ops-band ops-band-fixed">Fixed<span>deterministic, tested, boring on purpose</span></p>
+          <div class="ops-rail"><span>telemetry</span></div>
+        </div>
+        <p class="fig-note">Only actions go through the policy check; telemetry goes straight back to the AI layer.</p>
+        <figcaption><b>Figure 1.</b> The stack I have in mind. The AI layer plans and proposes, but it can only act through a policy engine running rules that people have approved. Between that boundary and the hardware, everything runs deterministically, including learned components like a neural decoder once its weights are frozen.</figcaption>
+      </figure>
 
-      <h2>Practical consequences</h2>
+      <p>This only works if the AI layer is engineered like critical infrastructure. Every action should leave a record of what the system saw and why it acted, and the actions it's allowed to take at all should be on an explicit whitelist. Changes get tested against a simulator before they touch the machine, and any of them can be rolled back. The models need calibrated uncertainty and a defined way to hand a decision to a person when they're unsure, and the whole layer has to be benchmarked continuously against simple baselines, because a sophisticated controller that loses to a threshold rule isn't worth running. People still set the goals, define the invariants, approve the policy, and answer for the results, but asking them to be the real-time operating system for scientific infrastructure with a million components is pure nostalgia.</p>
 
-      <p>If we want utility-scale quantum computers, self-driving laboratories, next-generation fabs, or large robotic installations to work in the next decade, we should stop treating AI as an optional accelerator for decoders, compilers, lab notebooks, or operations dashboards. We should design it as part of the control plane from the start. That means instrumenting every subsystem for learning, building simulators and digital twins alongside hardware, exposing clean operational abstractions, and creating policy engines that can mediate between human intent and machine action.</p>
+      <p>The same models are already useful before the machine exists. Architecture search, photonic inverse design, decoder search, compiler co-optimization, experiment planning, and resource estimation are all searches through enormous design spaces under hard physical constraints, and operating the machine is the same kind of problem. I expect the tools for designing these machines and the tools for running them to merge.</p>
 
-      <p>I think this is one of the deepest engineering shifts now underway. For a long time, intelligence sat outside the machine: the scientist at the bench, the operator in the control room, the engineer on call. The systems now arriving are too dynamic, too coupled, and too large for that model. They need an adaptive layer between human intent and physical execution. In practice, that layer will be advanced AI. For utility-scale quantum computers especially, it will matter as much as the qubits themselves.</p>
+      <h2>Building for it</h2>
+
+      <p>Today AI mostly shows up in these machines as an optional accelerator for the decoder, the compiler, the lab notebook, or the operations dashboard. If we want machines like these working within the next decade, we should design it into the control plane from the start, the way we design the cryogenics and the control electronics. In practice that means instrumenting every subsystem so there's data to learn from, building simulators and digital twins alongside the hardware, exposing clean interfaces for operating each subsystem, and putting a policy engine between what people intend and what the machine does.</p>
+
+      <p>In experimental science the intelligence has mostly sat outside the machine, with the scientists, operators, and on-call engineers who run it. The machines being built now are too large and too tightly coupled for that, so they need an adaptive layer between the people and the hardware, and in practice that layer will be AI. For a utility-scale quantum computer especially, it will matter as much as the qubits themselves.</p>
 
     </article>
 
